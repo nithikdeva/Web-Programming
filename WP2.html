@@ -240,6 +240,58 @@
         .back-to-top:hover {
             background-color: #1565C0; /* Darker blue on hover */
         }
+		/* Quick Links Section */
+.quick-links {
+    background-color: #f1f1f1;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+}
+
+.quick-links h2 {
+    color: #1976D2;
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.links-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.link-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
+}
+
+.link-column h3 {
+    color: #2c3e50;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.link-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.link-column ul li {
+    margin-bottom: 10px;
+}
+
+.link-column ul li a {
+    color: #555;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease-in-out;
+}
+
+.link-column ul li a:hover {
+    color: #1976D2;
+}
     </style>
 </head>
 <body>
@@ -320,7 +372,7 @@
             <img src="slider6.jpg" alt="Campus Image 6">
         </div>
     </div>
-
+	
     <!-- Director's Message and Rankings Section -->
     <div class="director-ranking-container">
         <div class="director-message">
@@ -341,7 +393,42 @@
             <div class="ranking-circle">WORLD 1001-1200</div>
         </div>
     </div>
-
+	<!-- Quick Links Section -->
+<div class="quick-links">
+    <h2>Quick Links</h2>
+    <div class="links-container">
+        <div class="link-column">
+            <h3>Contact Us</h3>
+            <ul>
+                <li><a href="#">Communication Handbook</a></li>
+                <li><a href="#">Equbrates</a></li>
+                <li><a href="#">Emergency Contact Numbers</a></li>
+                <li><a href="#">Faculty Information System</a></li>
+                <li><a href="#">Holidays</a></li>
+            </ul>
+        </div>
+        <div class="link-column">
+            <h3>Other Links</h3>
+            <ul>
+                <li><a href="#">Intranet</a></li>
+                <li><a href="#">Internal Complaints Committee</a></li>
+                <li><a href="#">Institute Forms (Intranet)</a></li>
+                <li><a href="#">I-STEM</a></li>
+                <li><a href="#">NIRF</a></li>
+            </ul>
+        </div>
+        <div class="link-column">
+            <h3>More Links</h3>
+            <ul>
+                <li><a href="#">NMECT PROJECTS</a></li>
+                <li><a href="#">NAD</a></li>
+                <li><a href="#">Other Portals and Documents</a></li>
+                <li><a href="#">RTI Act</a></li>
+                <li><a href="#">Women cell</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
     <!-- Back to Top Button -->
     <button class="back-to-top" onclick="scrollToTop()">^</button>
 
