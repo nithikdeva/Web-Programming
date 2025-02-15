@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Official website of National Institute of Technology Warangal">
+    <meta name="keywords" content="NIT Warangal, Engineering, Education, Research">
+    <meta name="author" content="NIT Warangal">
+    <title>NITW Homepage</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #E0F7FA;
+        }
+
+        /* Top Header Bar */
+        .top-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 5px;
+            font-size: 18px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .social-icons a:hover {
+            color: #BBDEFB;
+        }
+
+        /* Marquee Announcements */
+        .marquee {
+            background-color: #BBDEFB;
+            padding: 10px;
+            font-size: 16px;
+            color: black;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #1976D2;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar li {
+            position: relative;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar a:hover {
+            color: #ddd;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 100%;
+            left: 0;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+            background-color: white;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .navbar li:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .header h2 {
+            font-weight: bold;
+            animation: fadeIn 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Image Slider */
+        .slider {
+            width: 100%;
+            margin: 20px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slides {
+            display: flex;
+            width: 400%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slides img {
+            width: 25%;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+        }
+
+        /* Director's Message and Rankings Section */
+        .director-ranking-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 40px;
+            background-color: #E3F2FD; /* Light blue background */
+        }
+
+        .director-message {
+            flex: 1;
+            min-width: 300px;
+            background-color: #ffffff; /* White background for contrast */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .director-message img {
+            width: 250px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 10px;
+        }
+
+        .director-message-content {
+            max-width: 700px;
+            color: #2c3e50; /* Dark blue text */
+        }
+
+        .director-message-content h2 {
+            color: #1976D2; /* Blue heading */
+        }
+
+        .ranking-section {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+            background-color: #ffffff; /* White background for contrast */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .ranking-circle {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #2c3e50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            font-weight: bold;
+            color: #2c3e50; /* Dark blue text */
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #1976D2; /* Blue background */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 50%; /* Circular button */
+            cursor: pointer;
+            display: none;
+            font-size: 20px;
+            line-height: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-top:hover {
+            background-color: #1565C0; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Header -->
+    <div class="top-header">
+        <div><strong>Welcome to National Institute of Technology Warangal</strong></div>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/NITWarangalOfficial/" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.youtube.com/@wsdcnitwarangal1954" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.linkedin.com/school/national-institute-of-technology-warangal/" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://x.com/warangal_nit" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/nitwarangalofficial/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+
+    <!-- Marquee Announcements -->
+    <div class="marquee" aria-live="polite">
+        <marquee id="announcement-marquee"></marquee>
+    </div>
+    <img src="toplogo.jpg" alt="NITW Logo" class="img">
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <ul>
+            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#"><i class="fas fa-university"></i> Institute</a>
+                <div class="dropdown-content">
+                    <a href="https://nitw.ac.in/aboutus"><i class="fas fa-info-circle"></i> About Us</a>
+                    <a href="https://nitw.ac.in/vis"><i class="fas fa-eye"></i> Vision and Mission</a>
+                    <a href="https://nitw.ac.in/keydocuments"><i class="fas fa-file-alt"></i> Key Documents</a>
+                    <a href="https://www.nitw.ac.in/alumni1/endowment_fund.html"><i class="fas fa-hand-holding-heart"></i> Giving Back</a>
+                </div>
+            </li>
+            <li><a href="#"><i class="fas fa-users-cog"></i> Administration</a>
+                <div class="dropdown-content">
+                    <a href="https://www.nitw.ac.in/page/?url=/NITWGL/chairman/"><i class="fas fa-user-tie"></i> Chairperson</a>
+                    <a href="https://www.nitw.ac.in/page/?url=/Director/DirectorNITW/"><i class="fas fa-user"></i> Director</a>
+                    <a href="https://www.nitw.ac.in/deans"><i class="fas fa-users"></i> Deans</a>
+                    <a href="https://www.nitw.ac.in/officers"><i class="fas fa-user-shield"></i> Officers</a>
+                </div>
+            </li>
+            <li>
+                <a href="#"><i class="fas fa-building"></i> Departments</a>
+                <div class="dropdown-content">
+                    <a href="#"><i class="fas fa-laptop-code"></i> CSE</a>
+                    <a href="#"><i class="fas fa-microchip"></i> ECE</a>
+                    <a href="#"><i class="fas fa-bolt"></i> EEE</a>
+                    <a href="#"><i class="fas fa-cogs"></i> Mechanical</a>
+                </div>
+            </li>
+            <li>
+                <a href="#"><i class="fas fa-book-open"></i> Academics</a>
+                <div class="dropdown-content">
+                    <a href="https://nitw.ac.in/tt"><i class="fas fa-table"></i> Time Tables</a>
+                    <a href="https://nitw.ac.in/ac"><i class="fas fa-calendar-alt"></i> Calendar</a>
+                    <a href="https://nitw.ac.in/eb"><i class="fas fa-file-signature"></i> Examination Section</a>
+                    <a href="https://www.nitw.ac.in/path/?dept=/nitwForms"><i class="fas fa-file-alt"></i> Academic Forms</a>
+                </div>
+            </li>
+            <li>
+                <a href="#"><i class="fas fa-user-graduate"></i> Students</a>
+                <div class="dropdown-content">
+                    <a href="https://nitw.ac.in/sw"><i class="fas fa-hands-helping"></i> Student Wellfare</a>
+                    <a href="https://www.nitw.ac.in/hostel"><i class="fas fa-bed"></i> Hall Of Residence</a>
+                    <a href="https://www.nitw.ac.in/DeanMHW"><i class="fas fa-brain"></i> Centre for Mental health and Awareness</a>
+                    <a href="https://nitw.ac.in/SGR"><i class="fas fa-comments"></i> Student Grievance Redressal</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Image Slider -->
+    <div class="slider">
+        <div class="slides">
+            <img src="slider3.jpg" alt="Campus Image 1">
+            <img src="slider1.jpg" alt="Campus Image 3">
+            <img src="slider5.jpg" alt="Campus Image 5">
+            <img src="slider6.jpg" alt="Campus Image 6">
+        </div>
+    </div>
+
+    <!-- Director's Message and Rankings Section -->
+    <div class="director-ranking-container">
+        <div class="director-message">
+            <img src="director.png" alt="Director Image">
+            <div class="director-message-content">
+                <h2>Director's Message</h2>
+                <p>I am glad that I have been given an opportunity to serve as the Director of National Institute of Technology (NIT) Warangal-the oldest one in the bracket of first 17 NITs. It is an honour and privilege for me to lead this prestigious institute which has a rich history of its distinction in teaching, research and service to the nation. It is the first regional engineering college whose foundation stone has been laid by the former prime minister, Pandit Jawaharlal Nehru in the year 1959. Over a period of more than six decades, NIT Warangal has emerged as one of the leading institutions in engineering and technology. Warangal is the second largest city of the state of Telangana, Hyderabad being the first one which has several places of interest to visit. Some of the cultural heritages worth seeing in Warangal are Ramappa Temple, Bhadrakali Temple and thousand pillar temple. NIT Warangal is poised to create an ambience for nurturing innovation, incubation, creativity and excellence within its faculty and students towards achieving the sustainable development goals. We emphasize on student centric education with interdisciplinary research and development for the benefit of Industry and Society.NIT Warangal becomes a preferred institution for top rankers in Joint Entrance Examination (Main) because of its excellent teaching learning process, infrastructure that a student needs for effective learning. Our alumni have received distinguished recognitions in their chosen areas of profession and extend support towards sustainable development of the institute. I invite participation of all the stakeholders in the growth plan of the institute to steer it to the next level of success in all fronts.</p>
+                <p><strong>Professor Bidyadhar Subudhi</strong><br>Director</p>
+            </div>
+        </div>
+
+        <div class="ranking-section">
+            <h2>Ranking NIRF-2024</h2>
+            <div class="ranking-circle">ENGINEERING 21</div>
+            <div class="ranking-circle">OVERALL 53</div>
+            <h2>Times Higher Education-2024</h2>
+            <div class="ranking-circle">ASIA 351-400</div>
+            <div class="ranking-circle">WORLD 1001-1200</div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" onclick="scrollToTop()">^</button>
+
+    <script>
+        // Show/hide back to top button
+        window.onscroll = function() {
+            let button = document.querySelector('.back-to-top');
+            if (document.documentElement.scrollTop > 200) {
+                button.style.display = 'block';
+            } else {
+                button.style.display = 'none';
+            }
+        };
+
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Slider functionality
+        let slideIndex = 0;
+        const slides = document.querySelector('.slides');
+        const totalSlides = slides.children.length;
+
+        function moveSlider() {
+            slideIndex = (slideIndex + 1) % totalSlides;
+            slides.style.transform = `translateX(-${slideIndex * 25}%)`;
+        }
+
+        setInterval(moveSlider, 3000); // Change slide every 3 seconds
+
+        // Random Announcements
+        const announcements = [
+            "Admissions open for 2025 batch!",
+            "Environmental Sustainability Program on 10th Feb 2025",
+            "Workshop on AI and Machine Learning on 15th March 2025",
+            "Campus recruitment drive on 20th April 2025",
+            "New research grants announced for faculty and students"
+        ];
+
+        const marquee = document.getElementById('announcement-marquee');
+        function updateAnnouncement() {
+            const randomAnnouncement = announcements[Math.floor(Math.random() * announcements.length)];
+            marquee.textContent = randomAnnouncement;
+        }
+
+        setInterval(updateAnnouncement, 5000); // Change announcement every 5 seconds
+        updateAnnouncement(); // Initial announcement
+    </script>
+</body>
+</html>
