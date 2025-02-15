@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Explore Rome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            color: #f9f9f9;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: #f1c40f;
+        }
+
+        a {
+            text-decoration: none;
+            color: #f1c40f;
+        }
+
+        a:hover {
+            color: #e67e22;
+        }
+
+        /* Header */
+        .header {
+            background: url('rometop.jpg') no-repeat center center/cover;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .header p {
+            font-size: 20px;
+            margin: 10px 0 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #2c3e50;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .navbar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .navbar li {
+            display: inline;
+        }
+
+        .navbar a {
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .navbar a:hover {
+            color: #BBDEFB;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 40px 20px;
+            background-color: #444;
+            margin: 20px 0;
+        }
+
+        .content-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #f1c40f;
+        }
+
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        /* Gallery Styles */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .gallery img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Heritage Info Styles */
+        .heritage-info {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #555;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .heritage-info h3 {
+            margin-top: 0;
+            color: #f1c40f;
+        }
+
+        .heritage-info p {
+            color: #eee;
+        }
+
+        .heritage-info a {
+            color: #f1c40f;
+            text-decoration: underline;
+        }
+
+        .heritage-info a:hover {
+            color: #e67e22;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: white;
+            margin: 0 10px;
+        }
+
+        .footer a:hover {
+            color: #BBDEFB;
+        }
+
+        .footer .links {
+            margin-top: 10px;
+        }
+        
+        .footer .essential-links a {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div>
+            <h1><b>Explore Rome</b></h1>
+            <h2><b>The Eternal City</b></h2>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <ul>
+            <li><a href="tourismsitehome.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="romeheritage.html"><i class="fas fa-landmark"></i> Heritage</a></li>
+            <li><a href="hotelrome.html"><i class="fas fa-hotel"></i> Hotel Booking</a></li>
+            <li><a href="gallerysiterome.html"><i class="fas fa-images"></i> Gallery</a></li>
+        </ul>
+    </div>
+
+    <!-- Gallery Page Content -->
+    <div class="content-section">
+        <h2>Heritage Sites</h2>
+        <p>Explore the beauty of Rome through these stunning photos of its heritage sites.</p>
+        <div class="gallery">
+            <img src="colosseum.jpg" alt="Colosseum">
+            <img src="roman-forum.jpg" alt="Roman Forum">
+            <img src="vatican.jpg" alt="Vatican City">
+            <img src="pantheon.jpg" alt="Pantheon">
+            <img src="trevi-fountain.jpg" alt="Trevi Fountain">
+            <img src="st-peters-basilica.jpg" alt="St. Peter's Basilica">
+            <img src="spanish-steps.jpg" alt="Spanish Steps">
+            <img src="sistine-chapel.jpg" alt="Sistine Chapel">
+        </div>
+
+        <!-- Heritage Information -->
+        <div class="heritage-info">
+            <h3>Colosseum</h3>
+            <p>The Colosseum, also known as the Flavian Amphitheatre, is an iconic symbol of Imperial Rome. Built in 80 AD, it was used for gladiatorial contests and public spectacles. It could hold up to 80,000 spectators.</p>
+            <a href="https://en.wikipedia.org/wiki/Colosseum" target="_blank">Learn more about the Colosseum</a>
+        </div>
+
+        <div class="heritage-info">
+            <h3>Roman Forum</h3>
+            <p>The Roman Forum was the center of Roman public life for centuries. It was the site of triumphal processions, elections, public speeches, and commercial affairs. Today, it stands as a sprawling ruin of architectural fragments.</p>
+            <a href="https://en.wikipedia.org/wiki/Roman_Forum" target="_blank">Learn more about the Roman Forum</a>
+        </div>
+
+        <div class="heritage-info">
+            <h3>Vatican City</h3>
+            <p>Vatican City is the smallest independent state in the world and the spiritual center of the Catholic Church. It is home to St. Peter's Basilica, the Sistine Chapel, and the Vatican Museums.</p>
+            <a href="https://en.wikipedia.org/wiki/Vatican_City" target="_blank">Learn more about Vatican City</a>
+        </div>
+
+        <div class="heritage-info">
+            <h3>Pantheon</h3>
+            <p>The Pantheon is a former Roman temple, now a church, and one of the best-preserved ancient Roman buildings. Its dome is the largest unreinforced concrete dome in the world.</p>
+            <a href="https://en.wikipedia.org/wiki/Pantheon,_Rome" target="_blank">Learn more about the Pantheon</a>
+        </div>
+
+        <div class="heritage-info">
+            <h3>Trevi Fountain</h3>
+            <p>The Trevi Fountain is the largest Baroque fountain in Rome and one of the most famous fountains in the world. Tradition holds that throwing a coin into the fountain ensures a return to Rome.</p>
+            <a href="https://en.wikipedia.org/wiki/Trevi_Fountain" target="_blank">Learn more about the Trevi Fountain</a>
+        </div>
+
+        <div class="heritage-info">
+            <h3>St. Peter's Basilica</h3>
+            <p>St. Peter's Basilica is one of the largest and most renowned churches in the world. It is considered one of the holiest Catholic shrines and is the burial site of Saint Peter, one of the twelve apostles of Jesus.</p>
+            <a href="https://en.wikipedia.org/wiki/St._Peter%27s_Basilica" target="_blank">Learn more about St. Peter's Basilica</a>
+        </div>
+
+        <div class="heritage-info">
+            <h3>Spanish Steps</h3>
+            <p>The Spanish Steps are a set of steps climbing a steep slope between the Piazza di Spagna and the Trinità dei Monti church. They are a popular tourist attraction and a great spot for people-watching.</p>
+            <a href="https://en.wikipedia.org/wiki/Spanish_Steps" target="_blank">Learn more about the Spanish Steps</a>
+        </div>
+
+        <div class="heritage-info">
+            <h3>Sistine Chapel</h3>
+            <p>The Sistine Chapel is famous for its Renaissance frescoes, particularly Michelangelo's ceiling and "The Last Judgment." It is part of the Vatican Museums and serves as the papal chapel.</p>
+            <a href="https://en.wikipedia.org/wiki/Sistine_Chapel" target="_blank">Learn more about the Sistine Chapel</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Explore Rome. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+        <div class="essential-links">
+            <a href="tel:112"><i class="fas fa-phone"></i> Emergency Services (Police, Medical, Fire)</a>
+            <a href="https://www.roma.it/"><i class="fas fa-info-circle"></i> Official Rome Tourist Information</a>
+            <a href="https://www.who.int/"><i class="fas fa-first-aid"></i> Health Advisory</a>
+        </div>
+    </div>
+</body>
+</html>
