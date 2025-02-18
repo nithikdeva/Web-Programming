@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Animated Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #333, #111);
+        }
+        .form-container {
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            width: 320px;
+            text-align: center;
+            color: white;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            border: 2px solid #555;
+            border-radius: 5px;
+            outline: none;
+            background: #444;
+            color: white;
+            transition: 0.3s;
+        }
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            color: #aaa;
+            transition: 0.3s;
+        }
+        .input-group input:focus + label,
+        .input-group input:valid + label {
+            top: -5px;
+            font-size: 12px;
+            color: #ddd;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
+        .error.shake {
+            animation: shake 0.3s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+        .btn {
+            background: #555;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container" id="formContainer">
+        <h2>Register</h2>
+        <form id="myForm">
+            <div class="input-group">
+                <input type="text" id="username" required>
+                <label for="username">Username</label>
+                <div class="error" id="usernameError">Username is required</div>
+            </div>
+            <div class="input-group">
+                <input type="email" id="email" required>
+                <label for="email">Email</label>
+                <div class="error" id="emailError">Valid email is required</div>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" required>
+                <label for="password">Password</label>
+                <div class="error" id="passwordError">Password must be at least 6 characters</div>
+            </div>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("myForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let valid = true;
+
+            function showError(inputId, errorId, condition) {
+                const input = document.getElementById(inputId);
+                const error = document.getElementById(errorId);
+                if (condition) {
+                    error.style.display = "block";
+                    error.classList.add("shake");
+                    input.style.borderColor = "red";
+                    setTimeout(() => error.classList.remove("shake"), 300);
+                    valid = false;
+                } else {
+                    error.style.display = "none";
+                    input.style.borderColor = "#555";
+                }
+            }
+
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            showError("username", "usernameError", username === "");
+            showError("email", "emailError", !email.match(/^\S+@\S+\.\S+$/));
+            showError("password", "passwordError", password.length < 6);
+
+            if (valid) {
+                document.getElementById("formContainer").innerHTML = `
+                    <h2>Hi ${username}!</h2>
+                    <p>Let's get to know you better.</p>
+                    <form id="extraForm">
+                        <div class="input-group">
+                            <input type="text" id="age" required>
+                            <label for="age">Age</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="country" required>
+                            <label for="country">Country</label>
+                        </div>
+                        <button type="submit" class="btn">Submit</button>
+                    </form>
+                `;
+
+                document.getElementById("extraForm").addEventListener("submit", function(event) {
+                    event.preventDefault();
+                    const age = document.getElementById("age").value;
+                    const country = document.getElementById("country").value;
+                    alert(`Registration Complete!\nUsername: ${username}\nEmail: ${email}\nAge: ${age}\nCountry: ${country}`);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
