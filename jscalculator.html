@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expanded Math Calculator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .pixel-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .pixel {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+        
+        .calculator {
+            background-color: rgba(20, 20, 20, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            width: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .calculator.landscape {
+            width: 650px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .calculator.landscape .display-container {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .calculator.landscape .buttons-container {
+            display: flex;
+            width: 100%;
+        }
+
+        .calculator.landscape .main-buttons {
+            flex: 0 0 300px;
+        }
+
+        .calculator.landscape .scientific-buttons {
+            flex: 0 0 300px;
+            margin-left: 20px;
+            display: block;
+        }
+
+        .scientific-buttons {
+            display: none;
+        }
+
+        .display-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .display {
+            width: 100%;
+            height: 80px;
+            font-size: 2.5em;
+            text-align: right;
+            border: none;
+            padding: 10px;
+            background-color: rgba(30, 30, 30, 0.7);
+            color: white;
+            box-sizing: border-box;
+            border-radius: 10px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .button {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5em;
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: #333;
+            color: white;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        .button.operator {
+            background-color: #ff9500;
+        }
+
+        .button.function {
+            background-color: #747474;
+        }
+
+        .button.memory {
+            background-color: #747474;
+        }
+
+        .button.equal {
+            background-color: #ff9500;
+        }
+
+        .button.clear {
+            background-color: #a5a5a5;
+            color: black;
+        }
+
+        .button.zero {
+            width: 80px;
+            border-radius: 30px;
+            justify-content: flex-start;
+            padding-left: 25px;
+        }
+
+        .button.mode-toggle {
+            width: 60px;
+            background-color: #5e5ce6;
+            font-size: 0.7em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="pixel-background" id="pixelBackground"></div>
+    
+    <div class="calculator" id="calculator">
+        <div class="display-container">
+            <input type="text" class="display" id="display" value="0" disabled>
+        </div>
+        
+        <div class="buttons-container">
+            <div class="main-buttons">
+                <div class="button-row">
+                    <button class="button clear" data-action="clear">AC</button>
+                    <button class="button clear" data-action="backspace">←</button>
+                    <button class="button operator" data-action="operator">/</button>
+                    <button class="button operator" data-action="operator">*</button>
+                </div>
+                <div class="button-row">
+                    <button class="button" data-action="number">7</button>
+                    <button class="button" data-action="number">8</button>
+                    <button class="button" data-action="number">9</button>
+                    <button class="button operator" data-action="operator">-</button>
+                </div>
+                <div class="button-row">
+                    <button class="button" data-action="number">4</button>
+                    <button class="button" data-action="number">5</button>
+                    <button class="button" data-action="number">6</button>
+                    <button class="button operator" data-action="operator">+</button>
+                </div>
+                <div class="button-row">
+                    <button class="button" data-action="number">1</button>
+                    <button class="button" data-action="number">2</button>
+                    <button class="button" data-action="number">3</button>
+                    <button class="button equal" data-action="calculate">=</button>
+                </div>
+                <div class="button-row">
+                    <button class="button zero" data-action="number">0</button>
+                    <button class="button" data-action="decimal">.</button>
+                    <button class="button mode-toggle" id="modeToggle">⤢</button>
+                </div>
+            </div>
+            
+            <div class="scientific-buttons">
+                <div class="button-row">
+                    <button class="button memory" data-action="memory">MC</button>
+                    <button class="button memory" data-action="memory">MR</button>
+                    <button class="button memory" data-action="memory">M+</button>
+                    <button class="button memory" data-action="memory">M-</button>
+                </div>
+                <div class="button-row">
+                    <button class="button function" data-action="function" data-func="square">x²</button>
+                    <button class="button function" data-action="function" data-func="sqrt">√x</button>
+                    <button class="button function" data-action="function" data-func="pow">x^y</button>
+                    <button class="button function" data-action="function" data-func="log">log</button>
+                </div>
+                <div class="button-row">
+                    <button class="button function" data-action="function" data-func="sin">sin</button>
+                    <button class="button function" data-action="function" data-func="cos">cos</button>
+                    <button class="button function" data-action="function" data-func="tan">tan</button>
+                    <button class="button function" data-action="function" data-func="ln">ln</button>
+                </div>
+                <div class="button-row">
+                    <button class="button function" data-action="function" data-func="fact">n!</button>
+                    <button class="button function" data-action="parenthesis">(</button>
+                    <button class="button function" data-action="parenthesis">)</button>
+                    <button class="button function" data-action="function" data-func="mod">mod</button>
+                </div>
+                <div class="button-row">
+                    <button class="button function" data-action="constant" data-value="3.14159265359">π</button>
+                    <button class="button function" data-action="constant" data-value="2.71828182846">e</button>
+                    <button class="button function" data-action="function" data-func="exp">EXP</button>
+                    <button class="button function" data-action="function" data-func="inv">1/x</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create pixel animation background
+        function createPixelBackground() {
+            const pixelBackground = document.getElementById('pixelBackground');
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const pixelCount = Math.floor(windowWidth * windowHeight * 0.0005); // Adjust density here
+            
+            for (let i = 0; i < pixelCount; i++) {
+                const pixel = document.createElement('div');
+                pixel.className = 'pixel';
+                
+                // Random position
+                const x = Math.random() * windowWidth;
+                const y = Math.random() * windowHeight;
+                pixel.style.left = `${x}px`;
+                pixel.style.top = `${y}px`;
+                
+                // Random opacity
+                const opacity = Math.random() * 0.3 + 0.05;
+                pixel.style.opacity = opacity;
+                
+                // Random size (1-3px)
+                const size = Math.random() * 2 + 1;
+                pixel.style.width = `${size}px`;
+                pixel.style.height = `${size}px`;
+                
+                pixelBackground.appendChild(pixel);
+                
+                // Animate pixel
+                animatePixel(pixel);
+            }
+        }
+        
+        function animatePixel(pixel) {
+            const duration = Math.random() * 3000 + 2000; // 2-5 seconds
+            const initialOpacity = parseFloat(pixel.style.opacity);
+            
+            // Subtle pulsing animation
+            setInterval(() => {
+                const newOpacity = initialOpacity * (0.7 + Math.random() * 0.6);
+                pixel.style.opacity = newOpacity;
+                
+                // Slight movement
+                const currentLeft = parseFloat(pixel.style.left);
+                const currentTop = parseFloat(pixel.style.top);
+                const moveX = (Math.random() - 0.5) * 2; // -1 to 1
+                const moveY = (Math.random() - 0.5) * 2; // -1 to 1
+                
+                pixel.style.left = `${currentLeft + moveX}px`;
+                pixel.style.top = `${currentTop + moveY}px`;
+            }, duration);
+        }
+        
+        // Initialize calculator
+        document.addEventListener('DOMContentLoaded', () => {
+            createPixelBackground();
+            
+            const calculator = document.getElementById('calculator');
+            const display = document.getElementById('display');
+            const modeToggle = document.getElementById('modeToggle');
+            
+            let currentInput = '0';
+            let currentOperation = null;
+            let previousInput = null;
+            let waitingForOperand = false;
+            let memory = 0;
+            
+            // Toggle landscape mode
+            modeToggle.addEventListener('click', () => {
+                calculator.classList.toggle('landscape');
+                if (calculator.classList.contains('landscape')) {
+                    modeToggle.textContent = '⤡';
+                } else {
+                    modeToggle.textContent = '⤢';
+                }
+            });
+            
+            // Format display with thousands separators
+            const formatDisplay = (num) => {
+                if (typeof num === 'string' && num.includes('.')) {
+                    const parts = num.split('.');
+                    return parseFloat(parts[0]).toLocaleString() + '.' + parts[1];
+                }
+                return parseFloat(num).toLocaleString();
+            };
+            
+            // Update display
+            const updateDisplay = () => {
+                display.value = formatDisplay(currentInput);
+            };
+            
+            // Reset calculator
+            const clearCalculator = () => {
+                currentInput = '0';
+                currentOperation = null;
+                previousInput = null;
+                waitingForOperand = false;
+                updateDisplay();
+            };
+            
+            // Handle number input
+            const inputNumber = (num) => {
+                if (waitingForOperand) {
+                    currentInput = num;
+                    waitingForOperand = false;
+                } else {
+                    currentInput = currentInput === '0' ? num : currentInput + num;
+                }
+                updateDisplay();
+            };
+            
+            // Handle decimal point
+            const inputDecimal = () => {
+                if (waitingForOperand) {
+                    currentInput = '0.';
+                    waitingForOperand = false;
+                } else if (!currentInput.includes('.')) {
+                    currentInput += '.';
+                }
+                updateDisplay();
+            };
+            
+            // Handle backspace
+            const handleBackspace = () => {
+                if (currentInput.length > 1) {
+                    currentInput = currentInput.slice(0, -1);
+                } else {
+                    currentInput = '0';
+                }
+                updateDisplay();
+            };
+            
+            // Handle operators
+            const handleOperator = (operator) => {
+                const inputValue = parseFloat(currentInput);
+                
+                if (previousInput === null) {
+                    previousInput = inputValue;
+                } else if (currentOperation) {
+                    const result = performCalculation();
+                    previousInput = result;
+                    currentInput = String(result);
+                    updateDisplay();
+                }
+                
+                waitingForOperand = true;
+                currentOperation = operator;
+            };
+            
+            // Perform calculation
+            const performCalculation = () => {
+                const inputValue = parseFloat(currentInput);
+                const prevValue = previousInput;
+                let result;
+                
+                switch (currentOperation) {
+                    case '+':
+                        result = prevValue + inputValue;
+                        break;
+                    case '-':
+                        result = prevValue - inputValue;
+                        break;
+                    case '*':
+                        result = prevValue * inputValue;
+                        break;
+                    case '/':
+                        result = prevValue / inputValue;
+                        break;
+                    case 'pow':
+                        result = Math.pow(prevValue, inputValue);
+                        break;
+                    case 'mod':
+                        result = prevValue % inputValue;
+                        break;
+                    default:
+                        return inputValue;
+                }
+                
+                return result;
+            };
+            
+            // Handle equals
+            const handleEquals = () => {
+                if (currentOperation) {
+                    const result = performCalculation();
+                    currentInput = String(result);
+                    previousInput = null;
+                    currentOperation = null;
+                    waitingForOperand = true;
+                    updateDisplay();
+                }
+            };
+            
+            // Handle math functions
+            const handleFunction = (func) => {
+                const inputValue = parseFloat(currentInput);
+                let result;
+                
+                switch (func) {
+                    case 'square':
+                        result = inputValue * inputValue;
+                        break;
+                    case 'sqrt':
+                        result = Math.sqrt(inputValue);
+                        break;
+                    case 'sin':
+                        result = Math.sin(inputValue * Math.PI / 180); // Assuming degrees
+                        break;
+                    case 'cos':
+                        result = Math.cos(inputValue * Math.PI / 180); // Assuming degrees
+                        break;
+                    case 'tan':
+                        result = Math.tan(inputValue * Math.PI / 180); // Assuming degrees
+                        break;
+                    case 'log':
+                        result = Math.log10(inputValue);
+                        break;
+                    case 'ln':
+                        result = Math.log(inputValue);
+                        break;
+                    case 'exp':
+                        result = Math.exp(inputValue);
+                        break;
+                    case 'fact':
+                        result = factorial(inputValue);
+                        break;
+                    case 'inv':
+                        result = 1 / inputValue;
+                        break;
+                    case 'pow':
+                        previousInput = inputValue;
+                        currentOperation = 'pow';
+                        waitingForOperand = true;
+                        return;
+                    case 'mod':
+                        previousInput = inputValue;
+                        currentOperation = 'mod';
+                        waitingForOperand = true;
+                        return;
+                }
+                
+                currentInput = String(result);
+                waitingForOperand = true;
+                updateDisplay();
+            };
+            
+            // Calculate factorial
+            const factorial = (n) => {
+                if (n < 0) return NaN;
+                if (n === 0 || n === 1) return 1;
+                let result = 1;
+                for (let i = 2; i <= n; i++) {
+                    result *= i;
+                }
+                return result;
+            };
+            
+            // Handle memory operations
+            const handleMemory = (operation) => {
+                switch (operation) {
+                    case 'MC':
+                        memory = 0;
+                        break;
+                    case 'MR':
+                        currentInput = String(memory);
+                        waitingForOperand = true;
+                        updateDisplay();
+                        break;
+                    case 'M+':
+                        memory += parseFloat(currentInput);
+                        waitingForOperand = true;
+                        break;
+                    case 'M-':
+                        memory -= parseFloat(currentInput);
+                        waitingForOperand = true;
+                        break;
+                }
+            };
+            
+            // Handle constants
+            const handleConstant = (value) => {
+                currentInput = value;
+                waitingForOperand = true;
+                updateDisplay();
+            };
+            
+            // Handle parentheses (placeholder for more complex expression parsing)
+            const handleParenthesis = (parenthesis) => {
+                // This is just a placeholder. For a full implementation,
+                // you would need to implement expression parsing
+                console.log(`Parenthesis ${parenthesis} pressed`);
+            };
+            
+            // Event listeners
+            document.addEventListener('click', (event) => {
+                const target = event.target;
+                if (!target.classList.contains('button')) return;
+                
+                const action = target.dataset.action;
+                
+                switch (action) {
+                    case 'number':
+                        inputNumber(target.textContent);
+                        break;
+                    case 'decimal':
+                        inputDecimal();
+                        break;
+                    case 'clear':
+                        clearCalculator();
+                        break;
+                    case 'backspace':
+                        handleBackspace();
+                        break;
+                    case 'operator':
+                        handleOperator(target.textContent);
+                        break;
+                    case 'calculate':
+                        handleEquals();
+                        break;
+                    case 'function':
+                        handleFunction(target.dataset.func);
+                        break;
+                    case 'memory':
+                        handleMemory(target.textContent);
+                        break;
+                    case 'constant':
+                        handleConstant(target.dataset.value);
+                        break;
+                    case 'parenthesis':
+                        handleParenthesis(target.textContent);
+                        break;
+                }
+            });
+            
+            // Initialize display
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>
