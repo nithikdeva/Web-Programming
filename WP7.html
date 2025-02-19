@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Netflix-like font -->
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Roboto', sans-serif; /* Netflix-like font */
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f562aaf4-5dbb-4603-a32b-6ef6c2230136/dh0w8qv-9d8ee6b2-b41a-4681-ab9b-8a227560dc75.jpg/v1/fill/w_1280,h_720,q_75,strp/the_netflix_login_background__canada__2024___by_logofeveryt_dh0w8qv-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6IlwvZlwvZjU2MmFhZjQtNWRiYi00NjAzLWEzMmItNmVmNmMyMjMwMTM2XC9kaDB3OHF2LTlkOGVlNmIyLWI0MWEtNDY4MS1hYjliLThhMjI3NTYwZGM3NS5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.LOYKSxIDqfPwWHR0SSJ-ugGQ6bECF0yO6Cmc0F26CQs'); /* Cinematic background */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Dark overlay for background */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7); /* Dark overlay */
+            z-index: -1;
+        }
+
+        /* Modern Netflix logo */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px; /* Modern size */
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo:hover {
+            opacity: 1; /* Brighten on hover */
+        }
+
+        /* Container styling */
+        .container {
+            background: rgba(20, 20, 20, 0.8); /* Semi-translucent dark background */
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            width: 400px;
+            backdrop-filter: blur(10px); /* Blur effect for translucency */
+            transition: all 0.3s ease;
+        }
+
+        /* Headings */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 700; /* Bold for emphasis */
+        }
+
+        /* Input styling */
+        input {
+            padding: 12px 15px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 8px rgba(229, 9, 20, 0.6); /* Netflix red shadow */
+        }
+
+        /* Button styling */
+        button {
+            cursor: pointer;
+            background: linear-gradient(135deg, #E50914, #B20710); /* Gradient red */
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 0;
+            width: 100%;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #B20710, #E50914); /* Reverse gradient on hover */
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Clear Button Styling */
+        #clearBtn {
+            background: linear-gradient(135deg, #333, #444); /* Gradient gray */
+        }
+
+        #clearBtn:hover {
+            background: linear-gradient(135deg, #444, #555); /* Lighter gradient on hover */
+        }
+
+        /* Movie count in top right */
+        #movieCount {
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        /* List styling */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        li {
+            background: rgba(51, 51, 51, 0.8); /* Light gray with transparency */
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li:hover {
+            background: #E50914; /* Netflix red on hover */
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        li:active {
+            transform: scale(0.98);
+        }
+
+        li::after {
+            content: "?";
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        li:hover::after {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modern Netflix logo -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix Logo" class="logo">
+
+    <div class="container">
+    
+	<!-- Small Image Display -->
+    
+	<img src="fontbolt.png" alt="Fontbolt Image" style="width: 400px; height: auto; margin-bottom: 20px;">
+    
+    
+	<p id="movieCount">Total Movies: 0</p>
+    <input type="text" id="movieInput" placeholder="Enter a movie name">
+    
+	<button id="addMovieBtn">Add Movie</button>
+    
+	<ul id="movieList"></ul>
+    
+	<button id="clearBtn">Clear List</button>
+</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const movieInput = document.getElementById("movieInput");
+            const addMovieBtn = document.getElementById("addMovieBtn");
+            const movieList = document.getElementById("movieList");
+            const clearBtn = document.getElementById("clearBtn");
+            const movieCount = document.getElementById("movieCount");
+
+            let movies = [];
+
+            function updateMovieList() {
+                movieList.innerHTML = "";
+                movies.forEach((movie, index) => {
+                    const li = document.createElement("li");
+                    li.textContent = movie;
+                    li.addEventListener("click", () => removeMovie(index));
+                    movieList.appendChild(li);
+                });
+                movieCount.textContent = `Total Movies: ${movies.length}`;
+            }
+
+            function addMovie() {
+                const movieName = movieInput.value.trim();
+                if (movieName === "") {
+                    alert("Movie name cannot be empty!");
+                    return;
+                }
+                movies.push(movieName);
+                movieInput.value = "";
+                updateMovieList();
+            }
+
+            function removeMovie(index) {
+                movies.splice(index, 1);
+                updateMovieList();
+            }
+
+            function clearList() {
+                movies = [];
+                updateMovieList();
+            }
+
+            addMovieBtn.addEventListener("click", addMovie);
+            clearBtn.addEventListener("click", clearList);
+
+            movieInput.addEventListener("keypress", (event) => {
+                if (event.key === "Enter") {
+                    addMovie();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
