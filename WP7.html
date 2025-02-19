@@ -164,7 +164,7 @@
         }
 
         li::after {
-            content: "?";
+            content: "✖";
             color: rgba(255, 255, 255, 0.7);
             font-size: 14px;
             transition: color 0.3s;
@@ -181,12 +181,14 @@
 
     <div class="container">
     
-	<!-- Small Image Display -->
+	<!-- Small Image Display with Translucency -->
     
-	<img src="fontbolt.png" alt="Fontbolt Image" style="width: 400px; height: auto; margin-bottom: 20px;">
+	<img src="fontbolt.png" alt="Fontbolt Image" 
+         
+	style="width: 400px; height: auto; margin-bottom: 20px; backdrop-filter: blur(10px);">
     
     
-	<p id="movieCount">Total Movies: 0</p>
+	<p id="movieCount"><b>Total Movies: 0</b></p>
     <input type="text" id="movieInput" placeholder="Enter a movie name">
     
 	<button id="addMovieBtn">Add Movie</button>
@@ -194,8 +196,8 @@
 	<ul id="movieList"></ul>
     
 	<button id="clearBtn">Clear List</button>
-</div>
 
+    </div>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const movieInput = document.getElementById("movieInput");
