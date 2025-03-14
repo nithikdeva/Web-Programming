@@ -1,37 +1,53 @@
 // wp9javascript.js
 document.addEventListener('DOMContentLoaded', () => {
     // Helper: Draggable functionality for an element using a handle
-    function makeDraggable(element, handle) {
-      let pos = { top: 0, left: 0, x: 0, y: 0 };
-      handle.style.cursor = 'move';
-      handle.addEventListener('mousedown', mouseDownHandler);
+    // Improved draggable functionality
+function makeDraggable(element, handle) {
+    let pos = { top: 0, left: 0, x: 0, y: 0 };
     
-      function mouseDownHandler(e) {
-        pos = {
-          left: element.offsetLeft,
-          top: element.offsetTop,
-          x: e.clientX,
-          y: e.clientY
-        };
-        document.addEventListener('mousemove', mouseMoveHandler);
-        document.addEventListener('mouseup', mouseUpHandler);
-      }
+    if (!element || !handle) return;
     
-      function mouseMoveHandler(e) {
-        const dx = e.clientX - pos.x;
-        const dy = e.clientY - pos.y;
-        element.style.position = 'fixed';
-        element.style.left = `${pos.left + dx}px`;
-        element.style.top = `${pos.top + dy}px`;
-      }
+    handle.style.cursor = 'move';
+    handle.addEventListener('mousedown', mouseDownHandler);
     
-      function mouseUpHandler() {
-        document.removeEventListener('mousemove', mouseMoveHandler);
-        document.removeEventListener('mouseup', mouseUpHandler);
-      }
+    function mouseDownHandler(e) {
+      e.preventDefault();
+      
+      // Get current position
+      const rect = element.getBoundingClientRect();
+      pos = {
+        left: rect.left,
+        top: rect.top,
+        x: e.clientX,
+        y: e.clientY
+      };
+      
+      document.addEventListener('mousemove', mouseMoveHandler);
+      document.addEventListener('mouseup', mouseUpHandler);
     }
     
-    // Classes
+    function mouseMoveHandler(e) {
+      e.preventDefault();
+      
+      // Calculate new position
+      const dx = e.clientX - pos.x;
+      const dy = e.clientY - pos.y;
+      
+      // Update element position
+      element.style.position = 'fixed';
+      element.style.left = `${pos.left + dx}px`;
+      element.style.top = `${pos.top + dy}px`;
+      element.style.right = 'auto'; // Reset any right positioning
+      element.style.bottom = 'auto'; // Reset any bottom positioning
+    }
+    
+    function mouseUpHandler() {
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+    }
+  }
+  
+   // Classes
     
     class Product {
       constructor(id, name, price, image, description = 'No description available.', rating = 0, ratingCount = 0) {
@@ -87,19 +103,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     class Cart {
-      constructor() {
-        this.items = JSON.parse(localStorage.getItem('cart')) || [];
-        this.cartElement = document.getElementById('cart-items');
-        this.totalElement = document.createElement('div');
-        this.totalElement.classList.add('cart-total');
-        if (!this.cartElement) {
-          this.createCartUI();
-        } else {
-          this.cartElement.parentNode.appendChild(this.totalElement);
-          this.setupCartEvents();
+        constructor() {
+          this.items = JSON.parse(localStorage.getItem('cart')) || [];
+          this.cartElement = document.getElementById('cart-items');
+          this.totalElement = document.createElement('div');
+          this.totalElement.classList.add('cart-total');
+          
+          if (!this.cartElement) {
+            this.createCartUI();
+          } else {
+            this.cartElement.parentNode.appendChild(this.totalElement);
+            this.setupCartEvents();
+          }
+          
+          this.updateCart();
+          
+          // Make cart draggable after creating it
+          const cartContainer = document.getElementById('cart');
+          const dragHandle = document.querySelector('.drag-handle');
+          if (cartContainer && dragHandle) {
+            makeDraggable(cartContainer, dragHandle);
+          }
         }
-        this.updateCart();
-      }
       createCartUI() {
         const cartContainer = document.createElement('div');
         cartContainer.id = 'cart';
@@ -376,36 +401,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     class ThemeToggle {
-      constructor() {
-        this.theme = localStorage.getItem('theme') || 'light';
-        this.button = document.getElementById('theme-toggle-btn');
-        if (!this.button) {
-          const themeToggle = document.createElement('div');
-          themeToggle.className = 'theme-toggle';
-          themeToggle.innerHTML = `
-            <button id="theme-toggle-btn" title="Toggle Dark/Light Mode">
-              <i class="fas ${this.theme === 'dark' ? 'fa-sun' : 'fa-moon'}"></i>
-            </button>
-          `;
-          document.querySelector('header').appendChild(themeToggle);
+        constructor() {
+          this.theme = localStorage.getItem('theme') || 'light';
           this.button = document.getElementById('theme-toggle-btn');
+          
+          // If button doesn't exist, create it
+          if (!this.button) {
+            const themeToggle = document.createElement('div');
+            themeToggle.className = 'theme-toggle';
+            themeToggle.innerHTML = `
+              <button id="theme-toggle-btn" title="Toggle Dark/Light Mode">
+                <i class="fas ${this.theme === 'dark' ? 'fa-sun' : 'fa-moon'}"></i>
+                <span>${this.theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+              </button>
+            `;
+            
+            // Make sure header exists before appending
+            const header = document.querySelector('header');
+            if (header) {
+              header.appendChild(themeToggle);
+              this.button = document.getElementById('theme-toggle-btn');
+            }
+          }
+          
+          // Add event listener
+          if (this.button) {
+            this.button.addEventListener('click', () => this.toggleTheme());
+          }
+          
+          // Apply initial theme
+          this.applyTheme();
         }
-        this.button.addEventListener('click', () => this.toggleTheme());
-        this.applyTheme();
-      }
-      toggleTheme() {
-        this.theme = this.theme === 'light' ? 'dark' : 'light';
-        localStorage.setItem('theme', this.theme);
-        this.applyTheme();
-      }
-      applyTheme() {
-        document.body.classList.remove('light-theme', 'dark-theme');
-        document.body.classList.add(`${this.theme}-theme`);
-        if (this.button) {
-          this.button.innerHTML = `<i class="fas ${this.theme === 'dark' ? 'fa-sun' : 'fa-moon'}"></i>`;
+        
+        toggleTheme() {
+          this.theme = this.theme === 'light' ? 'dark' : 'light';
+          localStorage.setItem('theme', this.theme);
+          this.applyTheme();
+        }
+        
+        applyTheme() {
+          document.body.classList.remove('light-theme', 'dark-theme');
+          document.body.classList.add(`${this.theme}-theme`);
+          
+          if (this.button) {
+            this.button.innerHTML = `
+              <i class="fas ${this.theme === 'dark' ? 'fa-sun' : 'fa-moon'}"></i>
+              <span>${this.theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+            `;
+          }
         }
       }
-    }
+      
+      // Initialize theme toggle immediately on script load
+      document.addEventListener('DOMContentLoaded', () => {
+        new ThemeToggle();
+      });
     
     class CountdownTimer {
       constructor() {
@@ -800,6 +850,19 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       // Wishlist Toggle
       if (e.target.classList.contains('wishlist-btn')) {
+            const wishlistBtn = e.target.classList.contains('wishlist-btn') 
+        ? e.target 
+        : e.target.closest('.wishlist-btn');
+    
+        if (wishlistBtn) {
+            const productId = parseInt(wishlistBtn.dataset.id);
+            if (wishlist.hasItem(productId)) {
+            wishlist.removeItem(productId);
+            } else {
+            wishlist.addItem(productId);
+            }
+            wishlist.updateUI();
+        }
         const productId = parseInt(e.target.dataset.id);
         if (wishlist.hasItem(productId)) {
           wishlist.removeItem(productId);
