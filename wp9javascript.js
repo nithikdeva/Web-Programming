@@ -1,5 +1,3 @@
-// wp9javascript.js
-
 // =================== CLASSES ===================
 
 // Product Class
@@ -58,13 +56,14 @@ class Product {
     }
 }
 
-// Cart Class
+// Cart Class with draggable functionality
 class Cart {
     constructor() {
         this.items = JSON.parse(localStorage.getItem('cart')) || [];
         this.cartElement = document.getElementById('cart-items');
         this.totalElement = document.createElement('div');
         this.totalElement.classList.add('cart-total');
+        
         if (!this.cartElement) {
             this.createCartUI();
         } else {
@@ -75,9 +74,12 @@ class Cart {
     }
 
     createCartUI() {
+        // Create cart container with a drag handle
         const cartContainer = document.createElement('div');
         cartContainer.id = 'cart';
+        cartContainer.classList.add('cart-sidebar');
         cartContainer.innerHTML = `
+            <div class="drag-handle">Drag Me</div>
             <h2><i class="fas fa-shopping-cart"></i> Shopping Cart</h2>
             <div id="cart-items">
                 <p>Your cart is empty!</p>
@@ -87,11 +89,14 @@ class Cart {
                 <button id="checkout" class="cart-btn primary">Checkout</button>
             </div>
         `;
+        // Append to the content wrapper
         const contentWrapper = document.querySelector('.content-wrapper');
         contentWrapper.appendChild(cartContainer);
         this.cartElement = document.getElementById('cart-items');
         this.cartElement.parentNode.appendChild(this.totalElement);
         this.setupCartEvents();
+        // Make the cart draggable
+        makeDraggable(cartContainer, cartContainer.querySelector('.drag-handle'));
     }
 
     setupCartEvents() {
@@ -277,13 +282,9 @@ class RatingSystem {
    
     loadFromStorage() {
         const savedRatings = localStorage.getItem('ratings');
-        if (savedRatings) {
-            this.ratings = JSON.parse(savedRatings);
-        }
+        if (savedRatings) this.ratings = JSON.parse(savedRatings);
         const savedReviews = localStorage.getItem('reviews');
-        if (savedReviews) {
-            this.reviews = JSON.parse(savedReviews);
-        }
+        if (savedReviews) this.reviews = JSON.parse(savedReviews);
     }
    
     saveToStorage() {
@@ -307,7 +308,6 @@ class RatingSystem {
             });
         }
         this.saveToStorage();
-        // Update product rating in the global product data
         const product = ninjagoProducts.find(p => p.id === productId);
         if (product) {
             product.ratingCount = this.ratings[productId].length;
@@ -317,9 +317,7 @@ class RatingSystem {
    
     getAverageRating(productId) {
         const productRatings = this.ratings[productId];
-        if (!productRatings || productRatings.length === 0) {
-            return 0;
-        }
+        if (!productRatings || productRatings.length === 0) return 0;
         const sum = productRatings.reduce((total, rating) => total + rating, 0);
         return sum / productRatings.length;
     }
@@ -380,26 +378,26 @@ class RatingSystem {
     }
 }
 
-// ThemeToggle Class
+// ThemeToggle Class (uses existing button if present)
 class ThemeToggle {
     constructor() {
         this.theme = localStorage.getItem('theme') || 'light';
-        this.createThemeToggle();
+        // Check if button exists in HTML
+        this.button = document.getElementById('theme-toggle-btn');
+        if (!this.button) {
+            // Create one if not exists
+            const themeToggle = document.createElement('div');
+            themeToggle.className = 'theme-toggle';
+            themeToggle.innerHTML = `
+                <button id="theme-toggle-btn" title="Toggle Dark/Light Mode">
+                    <i class="fas ${this.theme === 'dark' ? 'fa-sun' : 'fa-moon'}"></i>
+                </button>
+            `;
+            document.querySelector('header').appendChild(themeToggle);
+            this.button = document.getElementById('theme-toggle-btn');
+        }
+        this.button.addEventListener('click', () => this.toggleTheme());
         this.applyTheme();
-    }
-    
-    createThemeToggle() {
-        const themeToggle = document.createElement('div');
-        themeToggle.className = 'theme-toggle';
-        themeToggle.innerHTML = `
-            <button id="theme-toggle-btn" title="Toggle Dark/Light Mode">
-                <i class="fas ${this.theme === 'dark' ? 'fa-sun' : 'fa-moon'}"></i>
-            </button>
-        `;
-        document.querySelector('header').appendChild(themeToggle);
-        document.getElementById('theme-toggle-btn').addEventListener('click', () => {
-            this.toggleTheme();
-        });
     }
     
     toggleTheme() {
@@ -411,14 +409,13 @@ class ThemeToggle {
     applyTheme() {
         document.body.classList.remove('light-theme', 'dark-theme');
         document.body.classList.add(`${this.theme}-theme`);
-        const themeBtn = document.getElementById('theme-toggle-btn');
-        if (themeBtn) {
-            themeBtn.innerHTML = `<i class="fas ${this.theme === 'dark' ? 'fa-sun' : 'fa-moon'}"></i>`;
+        if (this.button) {
+            this.button.innerHTML = `<i class="fas ${this.theme === 'dark' ? 'fa-sun' : 'fa-moon'}"></i>`;
         }
     }
 }
 
-// CountdownTimer Class
+// CountdownTimer Class (unchanged)
 class CountdownTimer {
     constructor() {
         this.seconds = 0;
@@ -540,7 +537,7 @@ class CountdownTimer {
     }
 }
 
-// DynamicTable Class
+// DynamicTable Class (unchanged)
 class DynamicTable {
     constructor() {
         this.data = [];
@@ -568,8 +565,7 @@ class DynamicTable {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="table-body">
-                </tbody>
+                <tbody id="table-body"></tbody>
             </table>
             <div id="add-form" class="form-container" style="display: none;">
                 <h4>Add New Product</h4>
@@ -602,29 +598,23 @@ class DynamicTable {
         document.getElementById('add-row').addEventListener('click', () => {
             document.getElementById('add-form').style.display = 'block';
         });
-        
         document.getElementById('cancel-add').addEventListener('click', () => {
             document.getElementById('add-form').style.display = 'none';
             document.getElementById('product-form').reset();
         });
-        
         document.getElementById('product-form').addEventListener('submit', (e) => {
             e.preventDefault();
             this.addNewProduct();
         });
-        
         document.getElementById('sort-table').addEventListener('click', () => {
             this.sortTable();
         });
-        
         document.getElementById('filter-table').addEventListener('click', () => {
             this.filterDuplicates();
         });
-        
         document.getElementById('reverse-table').addEventListener('click', () => {
             this.reverseTable();
         });
-        
         document.getElementById('table-body').addEventListener('click', (e) => {
             if (e.target.classList.contains('edit-btn')) {
                 this.editRow(e.target.closest('tr').dataset.id);
@@ -793,9 +783,50 @@ class ImageGallery {
     }
 }
 
+// =================== HELPER FUNCTIONS ===================
+
+// Draggable functionality for an element using a handle
+function makeDraggable(element, handle) {
+    let pos = { top: 0, left: 0, x: 0, y: 0 };
+    handle.style.cursor = 'move';
+    handle.addEventListener('mousedown', mouseDownHandler);
+  
+    function mouseDownHandler(e) {
+        pos = {
+            left: element.offsetLeft,
+            top: element.offsetTop,
+            x: e.clientX,
+            y: e.clientY
+        };
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+    }
+  
+    function mouseMoveHandler(e) {
+        const dx = e.clientX - pos.x;
+        const dy = e.clientY - pos.y;
+        element.style.position = 'fixed';
+        element.style.left = `${pos.left + dx}px`;
+        element.style.top = `${pos.top + dy}px`;
+    }
+  
+    function mouseUpHandler() {
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+    }
+}
+
 // =================== APP INITIALIZATION & EVENT HANDLERS ===================
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Fix logo centering by ensuring the h1 container centers its content
+    const headerH1 = document.querySelector('.header-wrapper h1');
+    if (headerH1) {
+        headerH1.style.display = 'flex';
+        headerH1.style.alignItems = 'center';
+        headerH1.style.justifyContent = 'center';
+    }
+    
     // Global Instances and Variables
     const productContainer = document.getElementById('product-container');
     if (!productContainer) {
@@ -982,7 +1013,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <option value="rating-desc">Sort by Rating (Highest First)</option>
     `;
     
-    // Wishlist Toggle Button Setup
+    // Wishlist Toggle Button Setup (without using arguments.callee)
     if (!document.getElementById('show-wishlist-btn')) {
         document.querySelector('header').innerHTML += `
             <div class="wishlist-toggle">
