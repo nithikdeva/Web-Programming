@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visa Requirement Checker</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f5e8d0;
+            color: #5a4a3f;
+            background-image: url("oldmap.png");
+        }
+        
+        h1 {
+            color: #8b5a2b;
+            margin-bottom: 5px;
+            text-align: center;
+            font-size: 28px;
+            font-family: 'Bookman Old Style', serif;
+            letter-spacing: 1px;
+        }
+        
+        .subheading {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #a67c52;
+        }
+        
+        .container {
+            background-color: #f2e8d7;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(138, 109, 59, 0.15);
+            border: 1px solid #e6d2b5;
+            position: relative;
+            overflow: hidden;
+            opacity: 0.85;
+        }
+        
+        form, .form-content {
+            background-color: rgba(255, 249, 238, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e6d2b5;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #8b5a2b;
+        }
+        
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d9bc8f;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #fffaf0;
+            font-family: 'Georgia', serif;
+        }
+        
+        button, input[type="submit"] {
+            background-color: #c19a6b;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:hover, input[type="submit"]:hover {
+            background-color: #a67c52;
+        }
+        
+        .message, #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .error {
+            background-color: #f8e1d0;
+            color: #8b4513;
+            border-left: 4px solid #c87f0a;
+        }
+        
+        .success {
+            background-color: #e8f0d4;
+            color: #4b5320;
+            border-left: 4px solid #8b9a47;
+        }
+        
+        .travel-icon {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .marquee-container {
+            overflow: hidden;
+            background-color: #e6d2b5;
+            padding: 8px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border: 1px dashed #c19a6b;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 25s linear infinite;
+            color: #8b5a2b;
+            font-weight: bold;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-130%); }
+        }
+        
+        .decorative-line {
+            border-top: 2px dashed #d9bc8f;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .compass {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 30px;
+            opacity: 0.2;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="compass">🧭</div>
+        
+        <div class="travel-icon">✈️ 🗺️</div>
+        <h1>Travel Visa Checker</h1>
+        <p class="subheading">Quick visa information for your next adventure</p>
+        
+        <div class="marquee-container">
+            <div class="marquee">📢 Get instant visa requirements for popular destinations! No waiting, no hassle! Plan your travels with confidence! 🌍</div>
+        </div>
+        
+        <form class="form-content">
+            <div class="form-group">
+                <label for="country">Where are you from?</label>
+                <select id="country">
+                    <option value="">-- Select Your Country --</option>
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="India">India</option>
+                    <option value="UK">UK</option>
+                    <option value="Australia">Australia</option>
+                </select>
+            </div>
+            
+            <button type="button" onclick="checkVisa()">Check Visa Requirements</button>
+        </form>
+        
+        <div class="decorative-line"></div>
+        
+        <div id="result" class="message" style="display: none;"></div>
+    </div>
+
+    <script>
+        function checkVisa() {
+            const country = document.getElementById('country').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.style.display = 'block';
+            
+            let message = '';
+            let isError = false;
+            
+            if (country === '') {
+                message = '⚠️ Please select a country to continue.';
+                isError = true;
+            } else if (country === 'USA') {
+                message = '🇺🇸 Visa required for most applicants.';
+            } else if (country === 'Canada') {
+                message = '🇨🇦 Visa required unless you have an eTA.';
+            } else if (country === 'India') {
+                message = '🇮🇳 Visa required before travel.';
+            } else if (country === 'UK') {
+                message = '🇬🇧 Visa depends on the duration of stay.';
+            } else if (country === 'Australia') {
+                message = '🇦🇺 eVisa available for eligible travelers.';
+            }
+            
+            resultDiv.innerHTML = message;
+            
+            if (isError) {
+                resultDiv.className = 'message error';
+            } else {
+                resultDiv.className = 'message success';
+            }
+        }
+    </script>
+</body>
+</html>
