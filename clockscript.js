@@ -1,71 +1,83 @@
-// clockscript.js
-let stopwatchInterval, countdownInterval;
-let stopwatchTime = 0;
-let alarms = [];
-let currentAlarmSound = null;
-
-function updateTime() {
+// Clock functionality
+function updateClock() {
     const now = new Date();
     const hours = now.getHours();
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
     const ampm = hours >= 12 ? 'PM' : 'AM';
     
-    document.getElementById('hours').textContent = 
-        String(hours % 12 || 12).padStart(2, '0');
-    document.getElementById('minutes').textContent = 
-        String(minutes).padStart(2, '0');
-    document.getElementById('seconds').textContent = 
-        String(seconds).padStart(2, '0');
+    // Digital display
+    document.getElementById('hours').textContent = String(hours % 12 || 12).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
     document.getElementById('ampm').textContent = ampm;
     
-    document.getElementById('date').textContent = 
-        now.toLocaleDateString(undefined, {
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric'
-        });
+    document.getElementById('date').textContent = now.toLocaleDateString(undefined, {
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+    });
 
-    checkAlarms(hours, minutes, seconds, ampm);
+    // Analog clock
+    const hourDegrees = (hours % 12) * 30 + minutes * 0.5;
+    const minuteDegrees = minutes * 6;
+    const secondDegrees = seconds * 6;
+    
+    document.getElementById('hourHand').style.transform = `rotateZ(${hourDegrees}deg)`;
+    document.getElementById('minuteHand').style.transform = `rotateZ(${minuteDegrees}deg)`;
+    document.getElementById('secondHand').style.transform = `rotateZ(${secondDegrees}deg)`;
+    
+    checkAlarms(hours, minutes, ampm);
 }
 
-// Theme Switching
-function changeTheme(theme) {
-    document.body.className = `theme-${theme}`;
-    localStorage.setItem('selected-theme', theme);
-    
-    // Add animation effect
-    document.querySelector('.clock-housing').style.animation = 'themeChange 0.5s ease';
-    setTimeout(() => {
-        document.querySelector('.clock-housing').style.animation = '';
-    }, 500);
+// Create clock markers
+function createMarkers() {
+    const markersContainer = document.getElementById('clockMarkers');
+    for (let i = 0; i < 60; i++) {
+        const marker = document.createElement('div');
+        marker.className = 'marker' + (i % 5 === 0 ? ' hour' : '');
+        marker.style.transform = `rotateZ(${i * 6}deg)`;
+        markersContainer.appendChild(marker);
+    }
 }
 
-// Event Listeners for Theme Buttons
-document.querySelectorAll('.theme-button').forEach(button => {
-    button.addEventListener('click', () => {
-        const theme = button.getAttribute('data-theme');
-        changeTheme(theme);
-    });
+// Stopwatch functionality
+let stopwatchInterval;
+let stopwatchTime = 0;
+let stopwatchRunning = false;
+
+function updateStopwatch() {
+    stopwatchTime++;
+    const hours = Math.floor(stopwatchTime / 3600);
+    const minutes = Math.floor((stopwatchTime % 3600) / 60);
+    const seconds = stopwatchTime % 60;
+    
+    document.getElementById('stopwatchDisplay').textContent = 
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+document.getElementById('startStopwatch').addEventListener('click', function() {
+    if (stopwatchRunning) {
+        clearInterval(stopwatchInterval);
+        this.textContent = 'Start';
+    } else {
+        stopwatchInterval = setInterval(updateStopwatch, 1000);
+        this.textContent = 'Stop';
+    }
+    stopwatchRunning = !stopwatchRunning;
 });
 
-// Load Saved Theme
-document.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('selected-theme') || 'vintage';
-    changeTheme(savedTheme);
-    
-    // Set initial time
-    updateTime();
-    setInterval(updateTime, 1000);
-    
-    // Add keyboard event for alarm input
-    document.getElementById('alarmTime').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            setAlarm();
-        }
-    });
+document.getElementById('resetStopwatch').addEventListener('click', function() {
+    clearInterval(stopwatchInterval);
+    stopwatchTime = 0;
+    stopwatchRunning = false;
+    document.getElementById('stopwatchDisplay').textContent = '00:00:00';
+    document.getElementById('startStopwatch').textContent = 'Start';
 });
+
+// Alarm functionality
+let alarms = [];
 
 function setAlarm() {
     const alarmInput = document.getElementById('alarmTime');
@@ -74,31 +86,21 @@ function setAlarm() {
     const [alarmHours, alarmMinutes] = alarmInput.value.split(':');
     const ampm = parseInt(alarmHours) >= 12 ? 'PM' : 'AM';
     
-    alarms.push({
-        hours: String(parseInt(alarmHours) % 12 || 12).padStart(2, '0'),
-        minutes: alarmMinutes.padStart(2, '0'),
-        ampm: ampm
-    });
+    const alarm = {
+        time: alarmInput.value,
+        displayTime: `${String(parseInt(alarmHours) % 12 || 12).padStart(2, '0')}:${alarmMinutes} ${ampm}`
+    };
 
-    updateActiveAlarmsList();
+    alarms.push(alarm);
+    updateAlarmList();
     alarmInput.value = '';
-    
-    // Add visual feedback
-    const feedback = document.createElement('div');
-    feedback.textContent = 'Alarm Set!';
-    feedback.className = 'alarm-feedback';
-    document.querySelector('.alarm-section').appendChild(feedback);
-    setTimeout(() => feedback.remove(), 2000);
 }
 
-function checkAlarms(currentHours, currentMinutes, currentSeconds, currentAMPM) {
+function checkAlarms(currentHours, currentMinutes, currentAMPM) {
+    const currentTime = `${String(currentHours).padStart(2, '0')}:${String(currentMinutes).padStart(2, '0')}`;
+    
     alarms.forEach((alarm, index) => {
-        if (
-            String(currentHours % 12 || 12).padStart(2, '0') === alarm.hours &&
-            String(currentMinutes).padStart(2, '0') === alarm.minutes &&
-            currentAMPM === alarm.ampm &&
-            currentSeconds === 0
-        ) {
+        if (alarm.time === currentTime) {
             triggerAlarm(index);
         }
     });
@@ -109,161 +111,54 @@ function triggerAlarm(index) {
     alarmSound.currentTime = 0;
     alarmSound.play();
     
-    const modal = document.getElementById('alarmModal');
-    modal.style.display = 'flex';
-    
-    // Add shaking animation to the clock
-    document.querySelector('.clock-housing').style.animation = 'shake 0.5s ease infinite';
-    
-    // Store the current alarm for snooze functionality
-    currentAlarmSound = alarms[index];
-    
-    // Remove the triggered alarm
+    // In a real implementation, you'd show a modal or notification
+    alert(`Alarm: ${alarms[index].displayTime}`);
     alarms.splice(index, 1);
-    updateActiveAlarmsList();
+    updateAlarmList();
 }
 
-function updateActiveAlarmsList() {
-    const activeAlarmsEl = document.getElementById('activeAlarms');
-    activeAlarmsEl.innerHTML = alarms.map(
-        (alarm, index) => `
-            <div>
-                ${alarm.hours}:${alarm.minutes} ${alarm.ampm}
-                <button onclick="removeAlarm(${index})">✕</button>
-            </div>
-        `
-    ).join('');
+function updateAlarmList() {
+    const alarmList = document.getElementById('alarmList');
+    alarmList.innerHTML = alarms.map((alarm, index) => `
+        <div class="alarm-item">
+            <span>${alarm.displayTime}</span>
+            <button class="delete-alarm" data-index="${index}">×</button>
+        </div>
+    `).join('');
+
+    document.querySelectorAll('.delete-alarm').forEach(button => {
+        button.addEventListener('click', function() {
+            alarms.splice(parseInt(this.dataset.index), 1);
+            updateAlarmList();
+        });
+    });
 }
 
-function removeAlarm(index) {
-    alarms.splice(index, 1);
-    updateActiveAlarmsList();
-    
-    // Add visual feedback
-    const feedback = document.createElement('div');
-    feedback.textContent = 'Alarm Removed';
-    feedback.className = 'alarm-feedback removed';
-    document.querySelector('.alarm-section').appendChild(feedback);
-    setTimeout(() => feedback.remove(), 2000);
-}
-
-// Stopwatch Functions
-function startStopwatch() {
-    if (!stopwatchInterval) {
-        stopwatchInterval = setInterval(() => {
-            stopwatchTime++;
-            updateStopwatchDisplay();
-        }, 1000);
-    }
-}
-
-function pauseStopwatch() {
-    clearInterval(stopwatchInterval);
-    stopwatchInterval = null;
-}
-
-function resetStopwatch() {
-    pauseStopwatch();
-    stopwatchTime = 0;
-    updateStopwatchDisplay();
-}
-
-function updateStopwatchDisplay() {
-    const hours = Math.floor(stopwatchTime / 3600);
-    const minutes = Math.floor((stopwatchTime % 3600) / 60);
-    const seconds = stopwatchTime % 60;
-    
-    document.getElementById('stopwatchDisplay').textContent = 
-        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
-
-// Countdown Functions
-function startCountdown() {
-    const minutesInput = parseInt(document.getElementById('countdownMinutes').value) || 0;
-    const secondsInput = parseInt(document.getElementById('countdownSeconds').value) || 0;
-    let totalSeconds = minutesInput * 60 + secondsInput;
-    
-    if (totalSeconds <= 0) return;
-    
-    // Reset progress bar
-    document.querySelector('.progress-fill').style.width = '100%';
-    
-    if (countdownInterval) clearInterval(countdownInterval);
-    
-    updateCountdownDisplay(totalSeconds);
-    
-    countdownInterval = setInterval(() => {
-        totalSeconds--;
-        updateCountdownDisplay(totalSeconds);
+// Theme switching
+document.querySelectorAll('.theme-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const theme = this.dataset.theme;
+        document.body.className = `theme-${theme}`;
         
-        // Update progress bar
-        const totalTime = minutesInput * 60 + secondsInput;
-        const percentage = (totalSeconds / totalTime) * 100;
-        document.querySelector('.progress-fill').style.width = `${percentage}%`;
-        
-        if (totalSeconds <= 0) {
-            clearInterval(countdownInterval);
-            document.getElementById('countdownDisplay').textContent = "Time's up!";
-            document.querySelector('.progress-fill').style.width = '0%';
-            
-            // Play alarm sound
-            const alarmSound = document.getElementById('alarmSound');
-            alarmSound.currentTime = 0;
-            alarmSound.play();
-            
-            // Show modal
-            document.getElementById('alarmModalText').textContent = "Countdown completed!";
-            document.getElementById('alarmModal').style.display = 'flex';
-        }
-    }, 1000);
-}
-
-function updateCountdownDisplay(totalSeconds) {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    document.getElementById('countdownDisplay').textContent = 
-        `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
-
-// Modal Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('alarmModal');
-    const closeBtn = document.querySelector('.close-btn');
-    const snoozeBtn = document.getElementById('snoozeBtn');
-    const dismissBtn = document.getElementById('dismissBtn');
-
-    closeBtn.onclick = () => {
-        modal.style.display = 'none';
-        document.querySelector('.clock-housing').style.animation = '';
-        document.getElementById('alarmSound').pause();
-    }
-
-    snoozeBtn.onclick = () => {
-        if (currentAlarmSound) {
-            // Snooze for 5 minutes
-            const now = new Date();
-            now.setMinutes(now.getMinutes() + 5);
-            
-            alarms.push({
-                hours: String(now.getHours() % 12 || 12).padStart(2, '0'),
-                minutes: String(now.getMinutes()).padStart(2, '0'),
-                ampm: now.getHours() >= 12 ? 'PM' : 'AM'
-            });
-
-            updateActiveAlarmsList();
-        }
-        modal.style.display = 'none';
-        document.querySelector('.clock-housing').style.animation = '';
-        document.getElementById('alarmSound').pause();
-    }
-
-    dismissBtn.onclick = () => {
-        modal.style.display = 'none';
-        document.querySelector('.clock-housing').style.animation = '';
-        document.getElementById('alarmSound').pause();
-    }
+        // Update active button
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.toggle('active', btn === this);
+        });
+    });
 });
 
-// Initialize time and set intervals
-updateTime();
-setInterval(updateTime, 1000);
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    createMarkers();
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    // Set dark theme as active by default
+    document.querySelector('.theme-btn[data-theme="dark"]').classList.add('active');
+    
+    // Event listeners
+    document.getElementById('setAlarm').addEventListener('click', setAlarm);
+    document.getElementById('alarmTime').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') setAlarm();
+    });
+});
