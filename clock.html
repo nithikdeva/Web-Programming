@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Digital Clock</title>
+    <link rel="stylesheet" href="clockstyles.css">
+</head>
+<body>
+    <div class="clock-container">
+        <div class="time-display">
+            <span id="hours">00</span>:
+            <span id="minutes">00</span>:
+            <span id="seconds">00</span>
+            <span id="ampm">AM</span>
+        </div>
+        
+        <div class="date-display" id="date">Loading...</div>
+        
+        <div class="theme-switcher">
+            <button data-theme="light">Light</button>
+            <button data-theme="dark">Dark</button>
+            <button data-theme="neon">Neon</button>
+            <button data-theme="cosmic">Cosmic</button>
+            <button data-theme="pastel">Pastel</button>
+        </div>
+
+        <div class="alarm-section">
+            <div class="alarm-input-container">
+                <input type="time" id="alarmTime" class="alarm-input">
+                <button onclick="setAlarm()" class="add-alarm-btn">+</button>
+            </div>
+            <div id="activeAlarms" class="active-alarms"></div>
+        </div>
+
+        <div class="stopwatch-section">
+            <div id="stopwatchDisplay" class="stopwatch-display">00:00:00</div>
+            <div class="stopwatch-controls">
+                <button onclick="startStopwatch()">Start</button>
+                <button onclick="pauseStopwatch()">Pause</button>
+                <button onclick="resetStopwatch()">Reset</button>
+            </div>
+        </div>
+
+        <div class="countdown-section">
+            <div class="countdown-inputs">
+                <input type="number" id="countdownMinutes" placeholder="Minutes" min="1">
+                <input type="number" id="countdownSeconds" placeholder="Seconds" min="0" max="59">
+            </div>
+            <button onclick="startCountdown()" class="start-countdown-btn">Start Countdown</button>
+            <div id="countdownDisplay" class="countdown-display"></div>
+            <div id="countdownProgress" class="progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- Alarm Modal -->
+    <div id="alarmModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Alarm</h2>
+            <p id="alarmModalText">Time's up!</p>
+            <button id="snoozeBtn">Snooze</button>
+            <button id="dismissBtn">Dismiss</button>
+        </div>
+    </div>
+
+    <audio id="alarmSound" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
+    <script src="clockscript.js"></script>
+</body>
+</html>

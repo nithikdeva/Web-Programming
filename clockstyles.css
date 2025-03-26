@@ -1,0 +1,359 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+
+:root {
+    --transition-speed: 0.3s;
+    --border-radius: 12px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    transition: background-color var(--transition-speed) ease;
+    line-height: 1.6;
+}
+
+.clock-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 450px;
+    max-width: 95%;
+    transition: all var(--transition-speed) ease;
+    backdrop-filter: blur(10px);
+}
+
+.time-display {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--primary-text);
+    margin-bottom: 15px;
+    letter-spacing: 5px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.date-display {
+    font-size: 1rem;
+    color: var(--secondary-text, #666);
+    margin-bottom: 20px;
+}
+
+.theme-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.theme-switcher button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    font-weight: 500;
+}
+
+.theme-switcher button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Theme Styles */
+body.theme-light {
+    --primary-bg: #f0f4f8;
+    --primary-text: #1a365d;
+    --secondary-text: #4a5568;
+    --accent-color: #3182ce;
+    background-color: var(--primary-bg);
+}
+
+body.theme-dark {
+    --primary-bg: #1a202c;
+    --primary-text: #e2e8f0;
+    --secondary-text: #a0aec0;
+    --accent-color: #4299e1;
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+}
+
+body.theme-neon {
+    --primary-bg: #000;
+    --primary-text: #0ff;
+    --secondary-text: #0af;
+    --accent-color: #f0f;
+    background-color: var(--primary-bg);
+    text-shadow: 0 0 10px currentColor;
+}
+
+body.theme-cosmic {
+    --primary-bg: #1a1a2e;
+    --primary-text: #e94560;
+    --secondary-text: #16213e;
+    --accent-color: #0f3460;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: var(--primary-text);
+}
+
+body.theme-pastel {
+    --primary-bg: #ffe5e5;
+    --primary-text: #ff6b6b;
+    --secondary-text: #4ecdc4;
+    --accent-color: #45b7d1;
+    background-color: var(--primary-bg);
+}
+
+/* Alarm and Buttons Styling */
+.alarm-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.alarm-input, .start-countdown-btn {
+    padding: 10px;
+    border: 2px solid var(--accent-color, #4a4a4a);
+    border-radius: 8px;
+    transition: all var(--transition-speed);
+}
+
+.add-alarm-btn {
+    background-color: var(--accent-color, #4a4a4a);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+.active-alarms {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.active-alarms div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0,0,0,0.05);
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: black;
+}
+
+/* Progress and Misc */
+.progress-bar {
+    height: 5px;
+    background-color: var(--accent-color, #4a4a4a);
+    width: 0%;
+    transition: width 1s linear;
+}
+
+button {
+    margin: 0 5px;
+    transition: all var(--transition-speed);
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&family=VT323&display=swap');
+
+:root {
+    --transition-speed: 0.3s;
+    --border-radius: 12px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    transition: background-color var(--transition-speed) ease;
+    line-height: 1.6;
+}
+
+.clock-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 450px;
+    max-width: 95%;
+    transition: all var(--transition-speed) ease;
+    backdrop-filter: blur(10px);
+}
+
+.time-display {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--primary-text);
+    margin-bottom: 15px;
+    letter-spacing: 5px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.time-display .blink-colon {
+    animation: blink 1s infinite;
+    opacity: 1;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.date-display {
+    font-size: 1rem;
+    color: var(--secondary-text, #666);
+    margin-bottom: 20px;
+}
+
+.theme-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.theme-switcher button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    font-weight: 500;
+}
+
+.theme-switcher button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Enhanced Theme Styles */
+body.theme-light {
+    --primary-bg: #f0f4f8;
+    --primary-text: #1a365d;
+    --secondary-text: #4a5568;
+    --accent-color: #3182ce;
+    --button-hover: #2c5282;
+    background-color: var(--primary-bg);
+}
+
+body.theme-dark {
+    --primary-bg: #1a202c;
+    --primary-text: #e2e8f0;
+    --secondary-text: #a0aec0;
+    --accent-color: #4299e1;
+    --button-hover: #2c5282;
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+}
+
+body.theme-neon {
+    --primary-bg: #000;
+    --primary-text: #0ff;
+    --secondary-text: #0af;
+    --accent-color: #f0f;
+    --button-hover: #ff00ff;
+    background-color: var(--primary-bg);
+    text-shadow: 0 0 10px currentColor;
+}
+
+body.theme-cosmic {
+    --primary-bg: #1a1a2e;
+    --primary-text: #e94560;
+    --secondary-text: #16213e;
+    --accent-color: #0f3460;
+    --button-hover: #e94560;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: var(--primary-text);
+}
+
+body.theme-pastel {
+    --primary-bg: #ffe5e5;
+    --primary-text: #ff6b6b;
+    --secondary-text: #4ecdc4;
+    --accent-color: #45b7d1;
+    --button-hover: #ff8a8a;
+    background-color: var(--primary-bg);
+}
+
+/* Theme Switcher Button Styles */
+.theme-switcher button[data-theme="light"] {
+    background-color: #f0f4f8;
+    color: #1a365d;
+}
+
+.theme-switcher button[data-theme="dark"] {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+
+.theme-switcher button[data-theme="neon"] {
+    background-color: #000;
+    color: #0ff;
+    text-shadow: 0 0 5px #0ff;
+}
+
+.theme-switcher button[data-theme="cosmic"] {
+    background-color: #1a1a2e;
+    color: #e94560;
+}
+
+.theme-switcher button[data-theme="pastel"] {
+    background-color: #ffe5e5;
+    color: #ff6b6b;
+}
+
+/* Rest of the previous CSS remains the same */
