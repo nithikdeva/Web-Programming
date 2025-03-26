@@ -1,3 +1,4 @@
+// clockscript.js
 let stopwatchInterval, countdownInterval;
 let stopwatchTime = 0;
 let alarms = [];
@@ -33,10 +34,16 @@ function updateTime() {
 function changeTheme(theme) {
     document.body.className = `theme-${theme}`;
     localStorage.setItem('selected-theme', theme);
+    
+    // Add animation effect
+    document.querySelector('.clock-housing').style.animation = 'themeChange 0.5s ease';
+    setTimeout(() => {
+        document.querySelector('.clock-housing').style.animation = '';
+    }, 500);
 }
 
 // Event Listeners for Theme Buttons
-document.querySelectorAll('.theme-switcher button').forEach(button => {
+document.querySelectorAll('.theme-button').forEach(button => {
     button.addEventListener('click', () => {
         const theme = button.getAttribute('data-theme');
         changeTheme(theme);
@@ -45,23 +52,43 @@ document.querySelectorAll('.theme-switcher button').forEach(button => {
 
 // Load Saved Theme
 document.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('selected-theme') || 'light';
+    const savedTheme = localStorage.getItem('selected-theme') || 'vintage';
     changeTheme(savedTheme);
+    
+    // Set initial time
+    updateTime();
+    setInterval(updateTime, 1000);
+    
+    // Add keyboard event for alarm input
+    document.getElementById('alarmTime').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            setAlarm();
+        }
+    });
 });
 
 function setAlarm() {
     const alarmInput = document.getElementById('alarmTime');
+    if (!alarmInput.value) return;
+    
     const [alarmHours, alarmMinutes] = alarmInput.value.split(':');
     const ampm = parseInt(alarmHours) >= 12 ? 'PM' : 'AM';
     
     alarms.push({
-        hours: alarmHours,
-        minutes: alarmMinutes,
+        hours: String(parseInt(alarmHours) % 12 || 12).padStart(2, '0'),
+        minutes: alarmMinutes.padStart(2, '0'),
         ampm: ampm
     });
 
     updateActiveAlarmsList();
     alarmInput.value = '';
+    
+    // Add visual feedback
+    const feedback = document.createElement('div');
+    feedback.textContent = 'Alarm Set!';
+    feedback.className = 'alarm-feedback';
+    document.querySelector('.alarm-section').appendChild(feedback);
+    setTimeout(() => feedback.remove(), 2000);
 }
 
 function checkAlarms(currentHours, currentMinutes, currentSeconds, currentAMPM) {
@@ -79,10 +106,14 @@ function checkAlarms(currentHours, currentMinutes, currentSeconds, currentAMPM) 
 
 function triggerAlarm(index) {
     const alarmSound = document.getElementById('alarmSound');
+    alarmSound.currentTime = 0;
     alarmSound.play();
     
     const modal = document.getElementById('alarmModal');
     modal.style.display = 'flex';
+    
+    // Add shaking animation to the clock
+    document.querySelector('.clock-housing').style.animation = 'shake 0.5s ease infinite';
     
     // Store the current alarm for snooze functionality
     currentAlarmSound = alarms[index];
@@ -98,7 +129,7 @@ function updateActiveAlarmsList() {
         (alarm, index) => `
             <div>
                 ${alarm.hours}:${alarm.minutes} ${alarm.ampm}
-                <button onclick="removeAlarm(${index})">❌</button>
+                <button onclick="removeAlarm(${index})">✕</button>
             </div>
         `
     ).join('');
@@ -107,6 +138,91 @@ function updateActiveAlarmsList() {
 function removeAlarm(index) {
     alarms.splice(index, 1);
     updateActiveAlarmsList();
+    
+    // Add visual feedback
+    const feedback = document.createElement('div');
+    feedback.textContent = 'Alarm Removed';
+    feedback.className = 'alarm-feedback removed';
+    document.querySelector('.alarm-section').appendChild(feedback);
+    setTimeout(() => feedback.remove(), 2000);
+}
+
+// Stopwatch Functions
+function startStopwatch() {
+    if (!stopwatchInterval) {
+        stopwatchInterval = setInterval(() => {
+            stopwatchTime++;
+            updateStopwatchDisplay();
+        }, 1000);
+    }
+}
+
+function pauseStopwatch() {
+    clearInterval(stopwatchInterval);
+    stopwatchInterval = null;
+}
+
+function resetStopwatch() {
+    pauseStopwatch();
+    stopwatchTime = 0;
+    updateStopwatchDisplay();
+}
+
+function updateStopwatchDisplay() {
+    const hours = Math.floor(stopwatchTime / 3600);
+    const minutes = Math.floor((stopwatchTime % 3600) / 60);
+    const seconds = stopwatchTime % 60;
+    
+    document.getElementById('stopwatchDisplay').textContent = 
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+// Countdown Functions
+function startCountdown() {
+    const minutesInput = parseInt(document.getElementById('countdownMinutes').value) || 0;
+    const secondsInput = parseInt(document.getElementById('countdownSeconds').value) || 0;
+    let totalSeconds = minutesInput * 60 + secondsInput;
+    
+    if (totalSeconds <= 0) return;
+    
+    // Reset progress bar
+    document.querySelector('.progress-fill').style.width = '100%';
+    
+    if (countdownInterval) clearInterval(countdownInterval);
+    
+    updateCountdownDisplay(totalSeconds);
+    
+    countdownInterval = setInterval(() => {
+        totalSeconds--;
+        updateCountdownDisplay(totalSeconds);
+        
+        // Update progress bar
+        const totalTime = minutesInput * 60 + secondsInput;
+        const percentage = (totalSeconds / totalTime) * 100;
+        document.querySelector('.progress-fill').style.width = `${percentage}%`;
+        
+        if (totalSeconds <= 0) {
+            clearInterval(countdownInterval);
+            document.getElementById('countdownDisplay').textContent = "Time's up!";
+            document.querySelector('.progress-fill').style.width = '0%';
+            
+            // Play alarm sound
+            const alarmSound = document.getElementById('alarmSound');
+            alarmSound.currentTime = 0;
+            alarmSound.play();
+            
+            // Show modal
+            document.getElementById('alarmModalText').textContent = "Countdown completed!";
+            document.getElementById('alarmModal').style.display = 'flex';
+        }
+    }, 1000);
+}
+
+function updateCountdownDisplay(totalSeconds) {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    document.getElementById('countdownDisplay').textContent = 
+        `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 // Modal Event Listeners
@@ -118,6 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeBtn.onclick = () => {
         modal.style.display = 'none';
+        document.querySelector('.clock-housing').style.animation = '';
+        document.getElementById('alarmSound').pause();
     }
 
     snoozeBtn.onclick = () => {
@@ -135,14 +253,16 @@ document.addEventListener('DOMContentLoaded', () => {
             updateActiveAlarmsList();
         }
         modal.style.display = 'none';
+        document.querySelector('.clock-housing').style.animation = '';
+        document.getElementById('alarmSound').pause();
     }
 
     dismissBtn.onclick = () => {
         modal.style.display = 'none';
+        document.querySelector('.clock-housing').style.animation = '';
+        document.getElementById('alarmSound').pause();
     }
 });
-
-// Rest of the existing functions (startStopwatch, pauseStopwatch, etc.) remain the same
 
 // Initialize time and set intervals
 updateTime();
