@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Chrono</title>
+    <link rel="stylesheet" href="clockstyles.css">
+</head>
+<body class="theme-dark">
+    <div class="container">
+        <!-- Analog Clock -->
+        <div class="analog-clock">
+            <div class="clock-markers" id="clockMarkers"></div>
+            <div class="clock-hand clock-hour" id="hourHand"></div>
+            <div class="clock-hand clock-minute" id="minuteHand"></div>
+            <div class="clock-hand clock-second" id="secondHand"></div>
+            <div class="clock-center"></div>
+        </div>
+
+        <!-- Digital Panel -->
+        <div class="digital-panel">
+            <div class="theme-switcher">
+                <button class="theme-btn" data-theme="light">Light</button>
+                <button class="theme-btn" data-theme="dark">Dark</button>
+                <button class="theme-btn" data-theme="neon">Neon</button>
+            </div>
+            
+            <div>
+                <div class="time-display">
+                    <span class="time-section" id="hours">12</span>
+                    <span class="time-separator">:</span>
+                    <span class="time-section" id="minutes">00</span>
+                    <span class="time-separator">:</span>
+                    <span class="time-section" id="seconds">00</span>
+                    <span class="am-pm" id="ampm">AM</span>
+                </div>
+                <div class="date-display" id="date">Monday, January 1, 2023</div>
+            </div>
+
+            <!-- Stopwatch -->
+            <div class="stopwatch">
+                <h3>Stopwatch</h3>
+                <div class="stopwatch-display" id="stopwatchDisplay">00:00:00</div>
+                <div class="stopwatch-controls">
+                    <button class="btn" id="startStopwatch">Start</button>
+                    <button class="btn" id="resetStopwatch">Reset</button>
+                </div>
+            </div>
+
+            <!-- Alarm -->
+            <div class="alarm">
+                <h3>Alarm</h3>
+                <div class="alarm-input">
+                    <input type="time" id="alarmTime">
+                    <button class="btn" id="setAlarm">Set Alarm</button>
+                </div>
+                <div class="alarm-list" id="alarmList"></div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="alarmSound" src="https://www.soundjay.com/mechanical/sounds/clock-alarm-01.mp3"></audio>
+    <script src="clockscript.js"></script>
+</body>
+</html>
