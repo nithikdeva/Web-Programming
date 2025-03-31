@@ -1,130 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ninjago - Official LEGO Store</title>
-  <link rel="stylesheet" href="wp9style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UltraKicks Pro | Premium Sneaker Store</title>
+    <link rel="stylesheet" href="scratchstyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <header>
-    <div class="header-wrapper">
-      <h1><img src="ninjago.png" alt="Ninjago Logo" class="logo"></h1>
-      <nav class="main-nav">
-        <ul>
-          <li><a href="#" class="nav-link active">Home</a></li>
-          <li><a href="#" class="nav-link">Sets</a></li>
-          <li><a href="#" class="nav-link">Characters</a></li>
-          <li><a href="#" class="nav-link">About</a></li>
-        </ul>
-      </nav>
-      <div class="theme-toggle">
-        <button id="theme-toggle-btn" title="Toggle Dark/Light Mode">
-          <i class="fas fa-moon"></i>
-        </button>
-      </div>
-    </div>
-  </header>
+    <header>
+        <div class="logo">UltraKicks</div>
+        <nav>
+            <ul>
+                <li><a href="#featured">Featured</a></li>
+                <li><a href="#inventory">Inventory</a></li>
+                <li><a href="#timer">Next Drop</a></li>
+            </ul>
+        </nav>
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="theme-btn"><i class="fas fa-moon"></i></button>
+    </header>
 
-  <div class="hero-banner">
-    <div class="hero-content">
-      <h2>Discover the World of Ninjago</h2>
-      <p>Explore exclusive LEGO Ninjago sets and unlock the power of Spinjitzu!</p>
-      <a href="#product-container" class="cta-button">Shop Now</a>
-    </div>
-  </div>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Step Into <span>Greatness</span></h1>
+                <p>Premium sneakers for collectors and enthusiasts</p>
+            </div>
+        </section>
 
-  <div class="container">
-    <div class="content-wrapper">
-      <!-- Product search and sorting section -->
-      <div class="products-section">
-        <h2 class="section-title">Featured Products</h2>
-        <div class="search-sort-container">
-          <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="search" placeholder="Search products...">
-          </div>
-          <div class="sort-container">
-            <select id="sort">
-              <option value="name-asc">Sort by Name (A-Z)</option>
-              <option value="name-desc">Sort by Name (Z-A)</option>
-              <option value="price-asc">Sort by Price (Low to High)</option>
-              <option value="price-desc">Sort by Price (High to Low)</option>
-            </select>
-          </div>
-        </div>
-        <div id="product-container" class="product-grid"></div>
-      </div>
+        <!-- Featured Sneakers Section -->
+        <section class="featured-sneakers" id="featured">
+            <h2>Latest Drops</h2>
+            <div class="controls">
+                <button onclick="sortList('alpha')" class="btn">Sort A-Z</button>
+                <button onclick="sortList('reverse')" class="btn">Sort Z-A</button>
+                <button onclick="sortList('price-low')" class="btn">Price: Low-High</button>
+                <button onclick="sortList('price-high')" class="btn">Price: High-Low</button>
+                <input type="text" id="searchInput" placeholder="Search sneakers..." onkeyup="searchSneakers()">
+            </div>
+            <div class="sneaker-grid" id="sneakerGrid">
+                <div class="sneaker-card" data-rating="4.8" data-name="Air Jordan 1 Retro High" data-price="185">
+                    <img src="https://images.unsplash.com/photo-1597045566677-8cf032ed6634?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=800&q=80" alt="Air Jordan 1 Retro High">
+                    <h3>Air Jordan 1 Retro High</h3>
+                    <p class="price">$185</p>
+                </div>
+                <div class="sneaker-card" data-rating="4.9" data-name="Yeezy Boost 350 V2" data-price="220">
+                    <img src="https://images.unsplash.com/photo-1551489186-cf8726f514f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=800&q=80" alt="Yeezy Boost 350 V2">
+                    <h3>Yeezy Boost 350 V2</h3>
+                    <p class="price">$220</p>
+                </div>
+                <div class="sneaker-card" data-rating="4.5" data-name="Nike Dunk Low Retro" data-price="110">
+                    <img src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=800&q=80" alt="Nike Dunk Low Retro">
+                    <h3>Nike Dunk Low Retro</h3>
+                    <p class="price">$110</p>
+                </div>
+                <div class="sneaker-card" data-rating="4.7" data-name="Adidas Ultra Boost 21" data-price="180">
+                    <img src="https://images.unsplash.com/photo-1605348532760-6753d2c43329?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=800&q=80" alt="Adidas Ultra Boost 21">
+                    <h3>Adidas Ultra Boost 21</h3>
+                    <p class="price">$180</p>
+                </div>
+                <div class="sneaker-card" data-rating="4.6" data-name="New Balance 990v5" data-price="175">
+                    <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=800&q=80" alt="New Balance 990v5">
+                    <h3>New Balance 990v5</h3>
+                    <p class="price">$175</p>
+                </div>
+                <div class="sneaker-card" data-rating="4.4" data-name="Puma RS-X" data-price="120">
+                    <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=800&q=80" alt="Puma RS-X">
+                    <h3>Puma RS-X</h3>
+                    <p class="price">$120</p>
+                </div>
+            </div>
+            
+            <!-- Sneaker Detail Modal -->
+            <div id="sneakerModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div class="sneaker-detail">
+                        <img id="modalImg" src="" alt="Sneaker">
+                        <div class="sneaker-info">
+                            <h2 id="modalTitle"></h2>
+                            <p id="modalPrice" class="price"></p>
+                            <div class="rating">
+                                <span id="modalRating"></span>
+                                <div id="ratingStars" class="stars"></div>
+                            </div>
+                            <p class="description">Premium quality sneakers designed for comfort and style. Limited edition release, grab yours while supplies last.</p>
+                            <div class="size-selector">
+                                <h4>Select Size</h4>
+                                <div class="sizes">
+                                    <button>7</button>
+                                    <button>7.5</button>
+                                    <button>8</button>
+                                    <button>8.5</button>
+                                    <button>9</button>
+                                    <button>9.5</button>
+                                    <button>10</button>
+                                    <button>10.5</button>
+                                </div>
+                            </div>
+                            <button class="btn add-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <!-- Shopping Cart Section -->
-      <div id="cart" class="cart-sidebar">
-        <h2><i class="fas fa-shopping-cart"></i> Shopping Cart</h2>
-        <div id="cart-items">
-          <p>Your cart is empty!</p>
-        </div>
-        <div class="cart-actions">
-          <button id="clear-cart" class="cart-btn">Clear Cart</button>
-        </div>
-      </div>
-    </div>
-  </div>
+        <!-- Countdown Timer Section -->
+        <section class="sneaker-release" id="timer">
+            <h2>Next Drop Countdown</h2>
+            <div class="timer-container">
+                <input type="number" id="timerInput" placeholder="Enter seconds" min="1">
+                <div class="timer-controls">
+                    <button id="startTimer" class="btn">Start</button>
+                    <button id="pauseTimer" class="btn">Pause</button>
+                    <button id="resetTimer" class="btn">Reset</button>
+                </div>
+                <div id="timeDisplay">00:00</div>
+            </div>
+        </section>
 
-  <!-- Product Modal -->
-  <div id="product-modal">
-    <button id="close-modal"><i class="fas fa-times"></i></button>
-    <img id="modal-image" src="" alt="">
-    <h2 id="modal-name"></h2>
-    <p id="modal-price"></p>
-    <p id="modal-description"></p>
-  </div>
-  <div id="overlay"></div>
+        <!-- Inventory Table -->
+        <section class="inventory" id="inventory">
+            <h2>Sneaker Inventory</h2>
+            <form id="inventoryForm">
+                <div class="form-group">
+                    <input type="text" placeholder="Model" id="model" required>
+                    <input type="number" placeholder="Size" id="size" required min="3" max="15" step="0.5">
+                    <input type="number" placeholder="Price ($)" id="price" required min="0">
+                    <button type="submit" class="btn">Add Sneaker</button>
+                </div>
+            </form>
+            <div class="table-container">
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Size</th>
+                            <th>Price ($)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- JS will populate -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-content">
-      <div class="footer-section brand">
-        <h3>Ninjago World</h3>
-        <p>Your ultimate destination for LEGO Ninjago collectibles!</p>
-        <div class="social-icons">
-          <a href="#"><i class="fab fa-facebook"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-        </div>
-      </div>
-      <div class="footer-section">
-        <h3>Quick Links</h3>
-        <ul class="footer-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Products</a></li>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h3>Contact Us</h3>
-        <p><i class="fas fa-envelope"></i> support@ninjago-world.com</p>
-        <p><i class="fas fa-phone-alt"></i> 1-800-NINJAGO</p>
-        <p><i class="fas fa-map-marker-alt"></i> LEGO City, Building Block St.</p>
-      </div>
-      <div class="footer-section">
-        <h3>Newsletter</h3>
-        <p>Subscribe for the latest updates and offers</p>
-        <form class="newsletter-form">
-          <input type="email" placeholder="Your Email Address">
-          <button type="submit">Subscribe</button>
-        </form>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 Ninjago World. All Rights Reserved.</p>
-    </div>
-  </footer>
+    <footer>
+        <p>&copy; 2025 UltraKicks Pro. All rights reserved.</p>
+    </footer>
 
-  <script type="text/javascript" src="wp9javascript.js"></script>
+    <script src="scratchscript.js"></script>
 </body>
 </html>
