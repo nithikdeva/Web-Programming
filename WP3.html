@@ -1,425 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog Website</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* General Styles */
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-      background-color: #f9f9f9;
-      color: #333;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    h1, h2, h3 {
-      font-family: 'Playfair Display', serif;
-    }
-
-    p {
-      font-family: 'Poppins', sans-serif;
-    }
-
-    /* Header */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 50px;
-      background-color: #333;
-      color: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transition: background-color 0.3s;
-    }
-
-    header .logo {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    header nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-    }
-
-    header nav ul li a {
-      color: #fff;
-      text-decoration: none;
-      position: relative;
-    }
-
-    header nav ul li a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      background: #fff;
-      bottom: -5px;
-      left: 0;
-      transition: width 0.3s;
-    }
-
-    header nav ul li a:hover::after {
-      width: 100%;
-    }
-
-    /* Hero Section */
-    .hero {
-		background: url('blogbanner.jpg') no-repeat center center/cover;      text-align: center;
-      padding: 100px 20px;
-      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://via.placeholder.com/1500');
-      background-size: cover;
-      color: #fff;
-      animation: fadeInHero 1s ease-in-out;
-    }
-
-    @keyframes fadeInHero {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    .hero h1 {
-      font-size: 48px;
-      margin-bottom: 20px;
-      animation: slideInLeft 1s ease-in-out;
-    }
-
-    @keyframes slideInLeft {
-      from {
-        transform: translateX(-50px);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    .hero h1 span {
-      font-family: 'Poppins', sans-serif;
-      color: #ffcc00;
-      animation: highlight 1.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes highlight {
-      from {
-        color: #ffcc00;
-      }
-      to {
-        color: #fff;
-      }
-    }
-
-    .hero .cta-button {
-      padding: 10px 20px;
-      font-size: 18px;
-      background: #ffcc00;
-      border: none;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .hero .cta-button:hover {
-      background: #ff9900;
-      transform: scale(1.1);
-    }
-
-    .hero .cta-button:active::after {
-      content: '';
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      background: rgba(255, 255, 255, 0.5);
-      border-radius: 50%;
-      transform: scale(0);
-      animation: ripple 0.6s linear;
-    }
-
-    @keyframes ripple {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-
-    /* Blog Section */
-    .blog {
-		background: url('citybg.jpg') no-repeat center center/cover;
-		padding: 50px 20px;
-		text-align: center;
-    }
-
-    .blog-posts {
-      display: flex;
-      justify-content: space-around;
-      gap: 20px;
-    }
-
-    .post-card {
-      width: 30%;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s, box-shadow 0.3s;
-      background-color: #fff;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .post-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    }
-
-    .post-card img {
-      width: 100%;
-      transition: transform 0.3s;
-    }
-
-    .post-card:hover img {
-      transform: scale(1.1);
-    }
-
-    .post-card a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .post-card h3 {
-      margin: 15px 0;
-    }
-
-    .post-card p {
-      padding: 0 15px 15px;
-    }
-
-    /* Categories Section */
-    .categories {
-		 background: url('') no-repeat center center/cover;
-      padding: 50px 20px;
-      text-align: center;
-      background-color: #444;
-      color: #fff;
-    }
-
-    .category-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-
-    .category-btn {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: none;
-      background: #ffcc00;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-    }
-
-    .category-btn:hover {
-      background: #ff9900;
-      transform: scale(1.1);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Subscribe Section */
-    .subscribe {
-		background: url('subscribe.jpg') no-repeat center center/cover;
-
-      padding: 50px 20px;
-      text-align: center;
-      background: #f4f4f4;
-      animation: fadeInSubscribe 1s ease-in-out;
-    }
-
-    @keyframes fadeInSubscribe {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    .subscribe form {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .subscribe input {
-      padding: 10px;
-      width: 200px;
-      border: 1px solid #ccc;
-      transition: border-color 0.3s;
-    }
-
-    .subscribe input:focus {
-      border-color: #1976D2;
-    }
-
-    .subscribe-btn {
-      padding: 10px 20px;
-      background: #333;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      transition: box-shadow 0.3s, background 0.3s, transform 0.3s;
-    }
-
-    .subscribe-btn:hover {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      background: #555;
-      transform: scale(1.1);
-    }
-
-    /* Footer */
-    footer {
-	  background: url('footer.jpg') no-repeat center center/cover;
-
-      padding: 20px;
-      text-align: center;
-      background: #333;
-      color: #fff;
-    }
-
-    .footer-content {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .footer-content .contact-info,
-    .footer-content .social-media {
-      margin: 10px 0;
-    }
-
-    .footer-content h3 {
-      margin-bottom: 10px;
-    }
-
-    .footer-content p {
-      margin: 5px 0;
-    }
-
-    .social-icons a {
-      color: #fff;
-      margin: 0 10px;
-      font-size: 20px;
-      transition: transform 0.3s;
-    }
-
-    .social-icons a:hover {
-      transform: rotate(360deg);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marine Explorer | Ocean Adventures & Discoveries</title>
+    <link rel="stylesheet" href="WP2styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="logo">MyBlog</div>
-    <nav>
-      <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#blog">Blog</a></li>
-        <li><a href="#categories">Categories</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <!-- Hero Section -->
-  <section id="home" class="hero">
-    <h1>Welcome to <span>MyBlog</span></h1>
-    <p>Discover amazing stories and insights.</p>
-    <button class="cta-button">Get Started</button>
-  </section>
-
-  <!-- Blog Section -->
-  <section id="blog" class="blog">
-    <h2>Latest Posts</h2>
-    <div class="blog-posts">
-      <div class="post-card">
-        <a href="https://example.com/blog1" target="_blank">
-          <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643" alt="Blog Post 1">
-          <h3>10 Tips for Better Productivity</h3>
-          <p>Learn how to boost your productivity with these simple tips.</p>
-        </a>
-      </div>
-      <div class="post-card">
-        <a href="https://example.com/blog2" target="_blank">
-          <img src="https://images.pexels.com/photos/267569/pexels-photo-267569.jpeg" alt="Blog Post 2">
-          <h3>Traveling on a Budget</h3>
-          <p>Discover how to travel the world without breaking the bank.</p>
-        </a>
-      </div>
-      <div class="post-card">
-        <a href="https://example.com/blog3" target="_blank">
-          <img src="https://picsum.photos/300/200" alt="Blog Post 3">
-          <h3>Healthy Eating Habits</h3>
-          <p>Start your journey to a healthier lifestyle with these tips.</p>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Categories Section -->
-  <section id="categories" class="categories">
-    <h2>Categories</h2>
-    <div class="category-buttons">
-      <button class="category-btn">Tech</button>
-      <button class="category-btn">Lifestyle</button>
-      <button class="category-btn">Travel</button>
-    </div>
-  </section>
-
-  <!-- Subscribe Section -->
-  <section class="subscribe">
-    <h2>Subscribe to Our Newsletter</h2>
-    <form>
-      <input type="text" placeholder="Your Name" required>
-      <input type="email" placeholder="Your Email" required>
-      <button type="submit" class="subscribe-btn">Subscribe</button>
-    </form>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-content">
-      <div class="contact-info">
-        <h3>Contact Us</h3>
-        <p>Email: info@myblog.com</p>
-        <p>Phone: +123 456 7890</p>
-        <p>Address: 123 Blog Street, City, Country</p>
-      </div>
-      <div class="social-media">
-        <h3>Follow Us</h3>
-        <div class="social-icons">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                Marine Explorer
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#blog" class="nav-link">Blog</a></li>
+                    <li><a href="#categories" class="nav-link">Categories</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
         </div>
-      </div>
-    </div>
-    <p>&copy; 2023 MyBlog. All rights reserved.</p>
-  </footer>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content reveal-element">
+            <h1><span class="heading-primary">Ocean</span> <span class="heading-secondary">Adventures</span></h1>
+            <p>Dive into a world of marine wonders and coastal discoveries</p>
+            <button class="cta-button ripple">Start Exploring</button>
+        </div>
+    </section>
+
+    <section id="blog" class="blog-section">
+        <div class="section-title reveal-element">
+            <h2>Latest <span>Discoveries</span></h2>
+            <p>Explore our most recent marine adventures and findings</p>
+        </div>
+        <div class="blog-container">
+            <div class="blog-card reveal-element">
+                <div class="blog-image">
+                    <img src="https://images.pexels.com/photos/3157890/pexels-photo-3157890.jpeg?cs=srgb&dl=pexels-francesco-ungaro-3157890.jpg&fm=jpg" alt="Coral Reef">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-tag">Marine Life</div>
+                    <h3>The Hidden World of Coral Reefs</h3>
+                    <p>Discover the vibrant ecosystems thriving beneath the surface and why they're critical to our oceans.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card reveal-element">
+                <div class="blog-image">
+                    <img src="https://media.licdn.com/dms/image/v2/C561BAQGn8EBqz25_oQ/company-background_10000/company-background_10000/0/1641494563734/coastal_expeditions_inc_cover?e=2147483647&v=beta&t=TYvJtyWgjUSHkLELY_BzV5dVDDaBiGJsBFOUlAjsT4Y" alt="Coastal Expedition">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-tag">Exploration</div>
+                    <h3>Coastal Expeditions: Charting New Territories</h3>
+                    <p>Join our team as we explore uncharted coastal regions and document previously unknown marine species.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card reveal-element">
+                <div class="blog-image">
+                    <img src="https://media.istockphoto.com/id/635731456/photo/green-turtle.jpg?s=612x612&w=0&k=20&c=W_QxMxGJftM-7i42Eyp7LYTDTXDnrQSmh8ZJelhULN0=" alt="Ocean Conservation">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-tag">Conservation</div>
+                    <h3>Our Ocean's Future: Conservation Efforts</h3>
+                    <p>Learn about the critical conservation work being done to protect our oceans for future generations.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="categories" class="categories-section">
+        <div class="section-title reveal-element">
+            <h2>Explore <span>Categories</span></h2>
+            <p>Dive deeper into specific areas of marine exploration</p>
+        </div>
+        <div class="categories-container reveal-element">
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-fish"></i>
+                </div>
+                <h3>Marine Life</h3>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-water"></i>
+                </div>
+                <h3>Ocean Science</h3>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-ship"></i>
+                </div>
+                <h3>Exploration</h3>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Conservation</h3>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3>Photography</h3>
+            </div>
+        </div>
+    </section>
+
+    <section id="subscribe" class="subscribe-section">
+        <div class="wave-top"></div>
+        <div class="subscribe-content reveal-element">
+            <h2>Stay Updated</h2>
+            <p>Subscribe to our newsletter for the latest marine discoveries and adventures</p>
+            <form class="subscribe-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                <button type="submit" class="glow-button ripple">Subscribe</button>
+            </form>
+        </div>
+        <div class="wave-bottom"></div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo">Marine Explorer</div>
+                <p>Exploring the depths since 2023</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#categories">Categories</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Ocean Avenue, Coastal City</p>
+                <p><i class="fas fa-envelope"></i> contact@marineexplorer.com</p>
+                <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Marine Explorer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="WP2script.js"></script>
 </body>
 </html>
